@@ -1,6 +1,15 @@
+import ButtonComponent from "./ButtonComponent";
 import CreatePost from "./CreatePost";
-import PostItem from "./PostItem";
 import InputComponent from "./InputComponent";
+import LoadingComponent from "./LoadingComponent";
+import PostItem from "./PostItem";
 import PostList from "./PostList";
 
-export { CreatePost, PostItem, InputComponent, PostList };
+export {
+  ButtonComponent,
+  CreatePost,
+  InputComponent,
+  LoadingComponent,
+  PostItem,
+  PostList,
+};

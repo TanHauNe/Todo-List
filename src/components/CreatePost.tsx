@@ -1,17 +1,17 @@
 "use client";
 
-import { getSessionStorage } from "@/utils/cookie";
 import { addPost, cancelEditPost, updatePost } from "@/redux/blog/blogSlice";
 import { RootState, useAppDispatch } from "@/redux/store";
+import { getSessionStorage } from "@/utils/cookie";
 import { schema } from "@/utils/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Form, Select, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import { ButtonComponent, InputComponent } from ".";
 import { IPost } from "../types/Post.type";
 import styles from "./CreatePost.module.css";
-import { InputComponent } from ".";
 
 const CreatePost = () => {
   const { Text } = Typography;
@@ -38,9 +38,9 @@ const CreatePost = () => {
 
   const form = useForm<IPost>({
     defaultValues: {
-      title: editPost?.title,
-      desc: editPost?.desc,
-      status: editPost?.status,
+      title: editPost?.title || "",
+      desc: editPost?.desc || "",
+      status: editPost?.status || 1,
     },
     mode: "all",
     resolver: yupResolver(createPostSchema),
@@ -60,7 +60,7 @@ const CreatePost = () => {
       user_id: userId?.toString(),
     };
 
-    if (editPost) {
+    if (editPost.title !== "") {
       dispatch(
         updatePost({
           postId: editPost._id || "",
@@ -134,9 +134,7 @@ const CreatePost = () => {
             </Button>
           </div>
         ) : (
-          <Button htmlType="submit" type="primary">
-            Upload Post
-          </Button>
+          <ButtonComponent htmlType="submit" content="Add post" />
         )}
       </Form>
     </div>

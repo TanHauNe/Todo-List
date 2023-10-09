@@ -1,6 +1,5 @@
-import { IAuth, ILogin } from "../../types/User.type";
 import { setSessionStorage, setTokenCookie } from "@/utils/cookie";
-
+import { IAuth, ILogin } from "../../types/User.type";
 import { loginAPI } from "@/utils/http";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
@@ -31,12 +30,16 @@ const initialState: UserState = {
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
-  async (body: ILogin, thunkAPI) => {
+  async (body: ILogin, { rejectWithValue }) => {
     try {
       const response = await loginAPI(body);
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      if (error.response) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue("Lỗi không xác định xảy ra");
+      }
     }
   }
 );
@@ -54,13 +57,14 @@ const blogSlice = createSlice({
         state.auth = action.payload;
         const { user, access_token } = action.payload;
         setSessionStorage(user);
-        setTokenCookie(access_token, 2);
+        setTokenCookie("token", access_token, 2);
         state.isLoading = false;
         state.isError = false;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        console.log(action.payload);
       });
   },
 });

@@ -1,20 +1,21 @@
+import { errorMessages } from "@/constants/message";
 import * as yup from "yup";
 
 export const schema = yup.object({
   email: yup
     .string()
-    .email("Vui lòng nhập một địa chỉ email hợp lệ")
-    .required("Email là bắt buộc"),
+    .email(errorMessages.emailValid)
+    .required(errorMessages.emailRequired),
   password: yup
     .string()
-    .required("Password là bắt buộc")
-    .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
-    .max(16, "Mật khẩu phải có tối đa 16 ký tự"),
-  full_name: yup.string().required("Họ và tên là bắt buộc"),
-  desc: yup.string().required("Mô tả là bắt buộc"),
-  title: yup.string().required("Tiêu đề là bắt buộc"),
+    .required(errorMessages.passwordRequired)
+    .min(8, errorMessages.passwordMinLength)
+    .max(16, errorMessages.passwordMaxLength),
+  full_name: yup.string().required(errorMessages.fullNameRequired),
+  desc: yup.string().required(errorMessages.descRequired),
+  title: yup.string().required(errorMessages.titleRequired),
   url_img: yup
     .string()
-    .url("Vui lòng nhập một URL hợp lệ cho ảnh đại diện")
-    .required("URL ảnh đại diện là bắt buộc"),
+    .url(errorMessages.urlImgValid)
+    .required(errorMessages.urlImgRequired),
 });

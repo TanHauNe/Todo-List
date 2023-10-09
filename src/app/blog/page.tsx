@@ -1,6 +1,5 @@
 "use client";
 
-
 import { CreatePost, PostList } from "@/components";
 import styles from "./page.module.css";
 
