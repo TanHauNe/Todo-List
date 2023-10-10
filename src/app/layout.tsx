@@ -1,5 +1,4 @@
 import { Providers } from "@/redux/provider";
-import Header from "@/app/[lang]/Header";
 import "./globals.css";
 
 export const metadata = {

@@ -1,9 +1,11 @@
+"use client";
+
 import { deletePost, getPostList, startEditPost } from "@/redux/blog/blogSlice";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import styles from "./PostList.module.css";
 import { PostItem } from ".";
+import styles from "./PostList.module.css";
 
 const PostList = () => {
   const postList = useSelector((state: RootState) => state.blog.postList);

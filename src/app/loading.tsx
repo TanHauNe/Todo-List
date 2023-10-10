@@ -1,9 +1,11 @@
+"use client";
+
 import { Spin } from "antd";
-import "./globals.css";
+import styles from "./page.module.css";
 
 const Loading = () => {
   return (
-    <div className="center">
+    <div className={styles.center}>
       <Spin size="large" />
     </div>
   );

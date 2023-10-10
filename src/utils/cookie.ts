@@ -1,9 +1,14 @@
 import { IUser } from "../types/User.type";
 
-function setTokenCookie(token: string, expirationDays: number) {
+function setTokenCookie(
+  key: string,
+  token: string,
+  expirationDays: number,
+  path: string = "/"
+) {
   const expirationDate = new Date();
   expirationDate.setDate(expirationDate.getDate() + expirationDays);
-  document.cookie = `token=${token}; expires=${expirationDate.toUTCString()}; path=/`;
+  document.cookie = `${key}=${token}; expires=${expirationDate.toUTCString()}; path=${path}`;
 }
 
 function getTokenFromCookie(): string | null {
@@ -24,16 +29,17 @@ function setSessionStorage(user: IUser) {
 
 function getSessionStorage() {
   const userDataJSON = sessionStorage.getItem("userData");
-  if (userDataJSON) {
-    const userData = JSON.parse(userDataJSON);
-    return userData;
+  try {
+    if (userDataJSON) {
+      const userData = JSON.parse(userDataJSON);
+      return userData;
+    }
+    return null;
+  } catch (err) {
+    return err;
   }
-  return null;
 }
 
 export {
-  setTokenCookie,
-  getTokenFromCookie,
-  getSessionStorage,
-  setSessionStorage,
+  getSessionStorage, getTokenFromCookie, setSessionStorage, setTokenCookie
 };

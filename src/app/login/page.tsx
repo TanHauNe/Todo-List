@@ -1,23 +1,26 @@
 "use client";
 
+import { ButtonComponent, InputComponent } from "@/components";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { loginUser } from "@/redux/user/userSlice";
+import { ILogin } from "@/types/User.type";
 import { schema } from "@/utils/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Form } from "antd";
+import { Form, message } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { ILogin } from "../../../types/User.type";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
-import { InputComponent } from "@/components";
 
 const Login = () => {
   const loginSchema = schema.pick(["email", "password"]);
+  const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.user);
-  const isError = useSelector((state: RootState) => state.user.isError);
+  const { error } = useSelector((state: RootState) => state.user);
   const auth = user.auth.access_token;
 
   useEffect(() => {
@@ -25,6 +28,12 @@ const Login = () => {
       route.push("blog");
     }
   }, [auth]);
+
+  useEffect(() => {
+    if (error.message) {
+      toast.warning(error.message);
+    }
+  }, [error]);
 
   const route = useRouter();
   const form = useForm<ILogin>({
@@ -50,6 +59,7 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
+      {contextHolder}
       <Form
         onFinish={handleSubmit(onSubmit)}
         className={styles.login_form}
@@ -61,7 +71,11 @@ const Login = () => {
           help={errors.email?.message}
           label="Email"
         >
-          <InputComponent placeholder="Email" name="email" control={control} />
+          <InputComponent
+            placeholder="Enter email"
+            name="email"
+            control={control}
+          />
         </Form.Item>
 
         <Form.Item
@@ -72,17 +86,14 @@ const Login = () => {
         >
           <InputComponent
             name="password"
-            placeholder="Password"
+            placeholder="Enter password"
             control={control}
+            isPassword
           />
         </Form.Item>
-        <div>{isError ? "Đăng nhập không thành công" : ""}</div>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Login
-          </Button>
-        </Form.Item>
+        <ButtonComponent htmlType="submit" content="Login" />
       </Form>
+      <ToastContainer limit={2} />
     </div>
   );
 };
