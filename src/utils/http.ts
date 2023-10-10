@@ -121,3 +121,21 @@ export async function loginAPI(data: any): Promise<ApiResponse> {
     throw error;
   }
 }
+
+export async function postImage(data: any): Promise<ApiResponse> {
+  try {
+    const response: AxiosResponse<ApiResponse> = await axios.post(
+      `${apiUrl}/api/upload/image`,
+      data
+    );
+
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      console.error("Lỗi từ API:", error.response.data);
+    } else {
+      console.error("Lỗi không thể kết nối đến server:", error.message);
+    }
+    throw error;
+  }
+}

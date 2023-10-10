@@ -3,6 +3,7 @@ import { Button } from "antd";
 
 const ButtonComponent = ({
   htmlType,
+  className,
   type,
   content,
   onClick,
@@ -10,6 +11,7 @@ const ButtonComponent = ({
 }: IButton) => {
   return (
     <Button
+      className={className || ""}
       onClick={onClick}
       htmlType={htmlType || "button"}
       type={type || "primary"}

@@ -29,11 +29,7 @@ export const getPostList = createAsyncThunk(
       const response = await getData();
       return response.data;
     } catch (error: any) {
-      if (error.response) {
-        return rejectWithValue(error.response.data);
-      } else {
-        return rejectWithValue("Lỗi không xác định xảy ra");
-      }
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -45,11 +41,7 @@ export const addPost = createAsyncThunk(
       const response = await postData(body);
       return response.data;
     } catch (error: any) {
-      if (error.response) {
-        return rejectWithValue(error.response.data);
-      } else {
-        return rejectWithValue("Lỗi không xác định xảy ra");
-      }
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -64,11 +56,7 @@ export const updatePost = createAsyncThunk(
       const response = await putData(body, postId);
       return response.data;
     } catch (error: any) {
-      if (error.response) {
-        return rejectWithValue(error.response.data);
-      } else {
-        return rejectWithValue("Lỗi không xác định xảy ra");
-      }
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -80,11 +68,7 @@ export const deletePost = createAsyncThunk(
       const response = await deleteData(postId);
       return response.data;
     } catch (error: any) {
-      if (error.response) {
-        return rejectWithValue(error.response.data);
-      } else {
-        return rejectWithValue("Lỗi không xác định xảy ra");
-      }
+      return rejectWithValue(error.response.data);
     }
   }
 );
