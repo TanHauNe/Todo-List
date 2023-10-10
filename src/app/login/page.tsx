@@ -11,6 +11,8 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
 
 const Login = () => {
@@ -18,7 +20,7 @@ const Login = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.user);
-  const isError = useSelector((state: RootState) => state.user.isError);
+  const { error } = useSelector((state: RootState) => state.user);
   const auth = user.auth.access_token;
 
   useEffect(() => {
@@ -28,13 +30,10 @@ const Login = () => {
   }, [auth]);
 
   useEffect(() => {
-    if (isError) {
-      messageApi.open({
-        type: "error",
-        content: "Đăng nhập không thành công",
-      });
+    if (error.message) {
+      toast.warning(error.message);
     }
-  }, [isError]);
+  }, [error]);
 
   const route = useRouter();
   const form = useForm<ILogin>({
@@ -72,7 +71,11 @@ const Login = () => {
           help={errors.email?.message}
           label="Email"
         >
-          <InputComponent placeholder="Enter email" name="email" control={control} />
+          <InputComponent
+            placeholder="Enter email"
+            name="email"
+            control={control}
+          />
         </Form.Item>
 
         <Form.Item
@@ -90,6 +93,7 @@ const Login = () => {
         </Form.Item>
         <ButtonComponent htmlType="submit" content="Login" />
       </Form>
+      <ToastContainer limit={2} />
     </div>
   );
 };

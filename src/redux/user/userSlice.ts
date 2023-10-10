@@ -1,15 +1,16 @@
 import { setSessionStorage, setTokenCookie } from "@/utils/cookie";
-import { IAuth, ILogin } from "../../types/User.type";
-import { loginAPI } from "@/utils/http";
+import { IAuth, ILogin, IRegister } from "../../types/User.type";
+import { loginAPI, postImage, registerAPI } from "@/utils/http";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-interface UserState {
+interface userState {
   auth: IAuth;
   isLoading: boolean;
-  isError: boolean;
+
+  error: any;
 }
 
-const initialState: UserState = {
+const initialState: userState = {
   auth: {
     user: {
       _id: "",
@@ -25,7 +26,8 @@ const initialState: UserState = {
     refresh_token: "",
   },
   isLoading: false,
-  isError: false,
+
+  error: {},
 };
 
 export const loginUser = createAsyncThunk(
@@ -35,11 +37,31 @@ export const loginUser = createAsyncThunk(
       const response = await loginAPI(body);
       return response.data;
     } catch (error: any) {
-      if (error.response) {
-        return rejectWithValue(error.response.data);
-      } else {
-        return rejectWithValue("Lỗi không xác định xảy ra");
-      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const registerUser = createAsyncThunk(
+  "user/registerUser",
+  async (body: IRegister, { rejectWithValue }) => {
+    try {
+      const response = await registerAPI(body);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const uploadImage = createAsyncThunk(
+  "user/uploadImage",
+  async (body: any, { rejectWithValue }) => {
+    try {
+      const response = await postImage(body);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -59,12 +81,31 @@ const blogSlice = createSlice({
         setSessionStorage(user);
         setTokenCookie("token", access_token, 2);
         state.isLoading = false;
-        state.isError = false;
+        state.error = {};
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError = true;
-        console.log(action.payload);
+        state.error = action.payload;
+      })
+      .addCase(registerUser.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = {};
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(uploadImage.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(uploadImage.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(uploadImage.rejected, (state, action) => {
+        state.isLoading = false;
       });
   },
 });

@@ -1,9 +1,14 @@
 "use client";
 
-import { LoadingComponent } from "@/components";
+import { Spin } from "antd";
+import styles from "./page.module.css";
 
 const Loading = () => {
-  return <LoadingComponent />;
+  return (
+    <div className={styles.center}>
+      <Spin size="large" />
+    </div>
+  );
 };
 
 export default Loading;

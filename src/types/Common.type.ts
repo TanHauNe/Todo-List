@@ -13,4 +13,5 @@ export interface IButton {
   content: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   danger?: boolean;
+  className?: string;
 }
