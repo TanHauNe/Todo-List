@@ -20,7 +20,7 @@ const Login = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.user);
-  const error = useSelector((state: RootState) => state.user.error);
+  const { error } = useSelector((state: RootState) => state.user);
   const auth = user.auth.access_token;
 
   useEffect(() => {
@@ -93,9 +93,7 @@ const Login = () => {
         </Form.Item>
         <ButtonComponent htmlType="submit" content="Login" />
       </Form>
-      <div>
-        <ToastContainer limit={2} />
-      </div>
+      <ToastContainer limit={2} />
     </div>
   );
 };

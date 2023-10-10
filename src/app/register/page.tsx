@@ -26,7 +26,7 @@ const Register = () => {
   const dispatch = useAppDispatch();
   const { Title } = Typography;
   const [loading, setLoading] = useState(false);
-  const error = useSelector((state: RootState) => state.user.error);
+  const { error } = useSelector((state: RootState) => state.user);
   const route = useRouter();
   const form = useForm<IRegister>({
     mode: "all",
@@ -46,18 +46,11 @@ const Register = () => {
   useEffect(() => {
     if (error.message) {
       toast.warning(error.message);
-    } 
+    }
   }, [error]);
 
   const onSubmit = (data: IRegister) => {
-    const registerData = {
-      email: data.email,
-      full_name: data.full_name,
-      url_img: data.url_img,
-      password: data.password,
-      confirm_password: data.confirm_password,
-    };
-    dispatch(registerUser(registerData));
+    dispatch(registerUser(data));
   };
 
   return (
