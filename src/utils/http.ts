@@ -5,7 +5,7 @@ import axios, { AxiosResponse } from "axios";
 
 const apiUrl = "https://todoapp-uit.vercel.app";
 
-const accessToken = getTokenFromCookie();
+const accessToken = getTokenFromCookie("token");
 const user = getSessionStorage();
 const userId = user?._id;
 
@@ -16,10 +16,27 @@ interface ApiResponse {
   data: any;
 }
 
-export async function getData(): Promise<ApiResponse> {
+export async function getListData(): Promise<ApiResponse> {
   try {
     const response: AxiosResponse<ApiResponse> = await axios.get(
-      `${apiUrl}/api/todo/${userId}`
+      `${apiUrl}/api/todo/list/${userId}`
+    );
+
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      console.error("Lỗi từ API:", error.response.data);
+    } else {
+      console.error("Lỗi không thể kết nối đến server:", error.message);
+    }
+    throw error;
+  }
+}
+
+export async function getData(postId: string): Promise<ApiResponse> {
+  try {
+    const response: AxiosResponse<ApiResponse> = await axios.get(
+      `${apiUrl}/api/todo/${postId}`
     );
 
     return response.data;
@@ -108,6 +125,24 @@ export async function loginAPI(data: any): Promise<ApiResponse> {
   try {
     const response: AxiosResponse<ApiResponse> = await axios.post(
       `${apiUrl}/api/auth/login`,
+      data
+    );
+
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      console.error("Lỗi từ API:", error.response.data);
+    } else {
+      console.error("Lỗi không thể kết nối đến server:", error.message);
+    }
+    throw error;
+  }
+}
+
+export async function refreshTokenAPI(data: any): Promise<ApiResponse> {
+  try {
+    const response: AxiosResponse<ApiResponse> = await axios.post(
+      `${apiUrl}/api/auth/refresh-token`,
       data
     );
 

@@ -1,16 +1,20 @@
 "use client";
 
+import { PostItem } from "@/components";
 import { deletePost, getPostList, startEditPost } from "@/redux/blog/blogSlice";
 import { RootState, useAppDispatch } from "@/redux/store";
+import { getSessionStorage } from "@/utils/cookie";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { PostItem } from ".";
-import styles from "./PostList.module.css";
+import styles from "./page.module.css";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
-const PostList = () => {
+const List = () => {
   const postList = useSelector((state: RootState) => state.blog.postList);
-  const user = useSelector((state: RootState) => state.user.auth);
+
   const dispatch = useAppDispatch();
+  const route = useRouter();
 
   useEffect(() => {
     dispatch(getPostList());
@@ -21,7 +25,11 @@ const PostList = () => {
   };
 
   const handleStartEditPost = (postId: string) => {
-    dispatch(startEditPost(postId));
+    route.replace(`todo/${postId}`);
+  };
+
+  const handleCreate = () => {
+    route.push("create");
   };
 
   return (
@@ -34,8 +42,11 @@ const PostList = () => {
           handleStartEditPost={handleStartEditPost}
         />
       ))}
+      <div onClick={handleCreate} className={styles.create_button}>
+        +
+      </div>
     </div>
   );
 };
 
-export default PostList;
+export default List;

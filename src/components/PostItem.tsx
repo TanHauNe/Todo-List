@@ -1,10 +1,10 @@
 "use client";
 
-import { Card, Tag } from "antd";
 import { useEffect, useState } from "react";
-import { ButtonComponent } from ".";
 import { IPost } from "../types/Post.type";
 import styles from "./PostItem.module.css";
+import { Tag, Typography } from "antd";
+import { ButtonComponent } from ".";
 
 interface PostItemType {
   post: IPost;
@@ -17,6 +17,7 @@ const PostItem = ({
   handleDelete,
   handleStartEditPost,
 }: PostItemType) => {
+  const { Text, Title } = Typography;
   const [status, setStatus] = useState({
     color: "",
     text: "",
@@ -26,39 +27,48 @@ const PostItem = ({
     if (post.status === 2) {
       setStatus({
         color: "processing",
-        text: "Đang làm",
+        text: "Doing",
       });
     } else if (post.status === 3) {
       setStatus({
         color: "success",
-        text: "Đã làm",
+        text: "Done",
       });
     } else {
       setStatus({
         color: "default",
-        text: "Chưa làm",
+        text: "Do not",
       });
     }
   }, [post]);
 
   return (
-    <Card bordered={false} title={post?.title} hoverable style={{ width: 600 }}>
-      <p>{post.desc}</p>
-      <div className={styles.button_group}>
-        <Tag color={status.color} className={styles.flex_center}>
-          {status.text}
-        </Tag>
-        <ButtonComponent
-          content="Edit"
-          onClick={() => handleStartEditPost(post._id || "")}
-        />
-        <ButtonComponent
-          danger
-          content="Delete"
-          onClick={() => handleDelete(post._id || "")}
-        />
+    <div className={styles.card}>
+      <Title title={post?.title} level={4} className={styles.card_title}>
+        {post?.title}
+      </Title>
+      <div className={styles.card_body}>
+        <Text title={post.desc} className={styles.card_text}>
+          {post.desc}
+        </Text>
+        <div className={styles.button_group}>
+          <Tag color={status.color} className={styles.button_item}>
+            {status.text}
+          </Tag>
+          <ButtonComponent
+            className={styles.button_item}
+            content="Edit"
+            onClick={() => handleStartEditPost(post._id || "")}
+          />
+          <ButtonComponent
+            className={styles.button_item}
+            danger
+            content="Delete"
+            onClick={() => handleDelete(post._id || "")}
+          />
+        </div>
       </div>
-    </Card>
+    </div>
   );
 };
 

@@ -2,23 +2,23 @@ import { IUser } from "../types/User.type";
 
 function setTokenCookie(
   key: string,
-  token: string,
+  value: string,
   expirationDays: number,
   path: string = "/"
 ) {
   const expirationDate = new Date();
   expirationDate.setDate(expirationDate.getDate() + expirationDays);
-  document.cookie = `${key}=${token}; expires=${expirationDate.toUTCString()}; path=${path}`;
+  document.cookie = `${key}=${value}; expires=${expirationDate.toUTCString()}; path=${path}`;
 }
 
-function getTokenFromCookie(): string | null {
+function getTokenFromCookie(key: string): string | null {
   function getCookie(name: string): string | null {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop()?.split(";").shift() || null;
     return null;
   }
-  const tokenFromCookie = getCookie("token");
+  const tokenFromCookie = getCookie(key);
   return tokenFromCookie;
 }
 
@@ -41,5 +41,8 @@ function getSessionStorage() {
 }
 
 export {
-  getSessionStorage, getTokenFromCookie, setSessionStorage, setTokenCookie
+  getSessionStorage,
+  getTokenFromCookie,
+  setSessionStorage,
+  setTokenCookie,
 };
