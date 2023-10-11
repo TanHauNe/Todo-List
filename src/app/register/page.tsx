@@ -56,11 +56,9 @@ const Register = () => {
   }, [success]);
 
   const onSubmit = (data: IRegister) => {
-    dispatch(registerUser(data));
-
-    setTimeout(() => {
+    dispatch(registerUser(data)).then(() => {
       dispatch(setSuccessError());
-    }, 2000);
+    });
   };
 
   return (

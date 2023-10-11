@@ -21,3 +21,10 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.text {
+  margin: 20px 0 0 0;
+  color: #1677ff !important;
+  display: flex;
+  justify-content: end;
+}

@@ -27,9 +27,7 @@ const Login = () => {
 
   useEffect(() => {
     if (auth) {
-      setTimeout(() => {
-        route.push("todo");
-      }, 1000);
+      route.push("todo");
     }
   }, [auth]);
 
@@ -63,11 +61,9 @@ const Login = () => {
       password: data.password,
     };
 
-    dispatch(loginUser(loginData));
-
-    setTimeout(() => {
+    dispatch(loginUser(loginData)).then(() => {
       dispatch(setSuccessError());
-    }, 2000);
+    });
   };
 
   return (

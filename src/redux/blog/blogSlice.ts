@@ -11,7 +11,7 @@ import { IPost } from "../../types/Post.type";
 const initEditPost: IPost = {
   title: "",
   desc: "",
-  status: undefined,
+  status: 1,
 };
 
 interface BlogState {

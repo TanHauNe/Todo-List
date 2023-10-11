@@ -15,6 +15,8 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
+import { status } from "@/configs/status";
+import Link from "next/link";
 
 const Create = () => {
   const { Text, Title } = Typography;
@@ -49,9 +51,9 @@ const Create = () => {
   }, [success]);
 
   const optionsSelect = [
-    { value: 1, label: "Do not" },
-    { value: 2, label: "Doing" },
-    { value: 3, label: "Done" },
+    { value: status.doNot, label: "Do not" },
+    { value: status.doing, label: "Doing" },
+    { value: status.done, label: "Done" },
   ];
 
   const form = useForm<IPost>({
@@ -74,11 +76,9 @@ const Create = () => {
       user_id: userId?.toString(),
     };
 
-    dispatch(addPost(addPostData));
-
-    setTimeout(() => {
+    dispatch(addPost(addPostData)).then(() => {
       dispatch(setSuccess());
-    }, 2000);
+    });
   };
 
   return (
@@ -114,7 +114,7 @@ const Create = () => {
             control={control}
             render={({ field }) => (
               <TextArea
-                style={{ height: 120, marginBottom: 24 }}
+                style={{ height: 120, margin: "0" }}
                 placeholder="Enter description"
                 {...field}
               />
@@ -143,6 +143,12 @@ const Create = () => {
         </Form.Item>
 
         <ButtonComponent htmlType="submit" content="Add post" />
+
+        <Link href={"/todo"}>
+          <Title className={styles.text} italic level={5}>
+            Todo list
+          </Title>
+        </Link>
       </Form>
       <ToastContainer limit={2} />
     </div>

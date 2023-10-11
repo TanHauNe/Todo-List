@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
+import { status } from "@/configs/status";
 
 const Edit = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -55,19 +56,19 @@ const Edit = ({ params }: { params: { id: string } }) => {
   }, [dispatch]);
 
   const optionsSelect = [
-    { value: 1, label: "Do not" },
-    { value: 2, label: "Doing" },
-    { value: 3, label: "Done" },
+    { value: status.doNot, label: "Do not" },
+    { value: status.doing, label: "Doing" },
+    { value: status.done, label: "Done" },
   ];
 
   const form = useForm<IPost>({
     defaultValues: {
       title: editPost?.title || "",
       desc: editPost?.desc || "",
-      status: editPost?.status || undefined,
+      status: editPost?.status || 1,
     },
     mode: "all",
-    resolver: yupResolver(createPostSchema) as any,
+    resolver: yupResolver(createPostSchema),
   });
   const { control, handleSubmit, formState, reset } = form;
   const { errors } = formState;
@@ -89,17 +90,18 @@ const Edit = ({ params }: { params: { id: string } }) => {
         postId: editPost._id || "",
         body: postData,
       })
-    );
-    dispatch(
-      updatePost({
-        postId: editPost._id || "",
-        body: postData,
+    )
+      .then(() => {
+        dispatch(
+          updatePost({
+            postId: editPost._id || "",
+            body: postData,
+          })
+        );
       })
-    );
-
-    setTimeout(() => {
-      dispatch(setSuccess());
-    }, 2000);
+      .then(() => {
+        dispatch(setSuccess());
+      });
   };
 
   const handleCancelEditPost = () => {
@@ -136,7 +138,7 @@ const Edit = ({ params }: { params: { id: string } }) => {
             control={control}
             render={({ field }) => (
               <TextArea
-                style={{ height: 120, marginBottom: 24 }}
+                style={{ height: 120, margin: "0" }}
                 placeholder="Enter description"
                 {...field}
               />
