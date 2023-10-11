@@ -13,10 +13,11 @@ export const schema = yup.object({
     .max(16, errorMessages.passwordMaxLength),
   confirm_password: yup
     .string()
-    .required("Please retype your password.")
-    .oneOf([yup.ref("password")], "Your passwords do not match."),
+    .required(errorMessages.confirmPasswordRequired)
+    .oneOf([yup.ref("password")], errorMessages.confirmPasswordValid),
   full_name: yup.string().required(errorMessages.fullNameRequired),
   desc: yup.string().required(errorMessages.descRequired),
+  status: yup.number().required(errorMessages.statusRequired),
   title: yup.string().required(errorMessages.titleRequired),
   url_img: yup
     .string()

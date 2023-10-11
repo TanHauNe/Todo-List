@@ -1,13 +1,18 @@
 import { setSessionStorage, setTokenCookie } from "@/utils/cookie";
 import { IAuth, ILogin, IRegister } from "../../types/User.type";
-import { loginAPI, postImage, registerAPI } from "@/utils/http";
+import {
+  loginAPI,
+  postImage,
+  refreshTokenAPI,
+  registerAPI,
+} from "@/utils/http";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface userState {
   auth: IAuth;
   isLoading: boolean;
-
   error: any;
+  success: boolean;
 }
 
 const initialState: userState = {
@@ -26,8 +31,8 @@ const initialState: userState = {
     refresh_token: "",
   },
   isLoading: false,
-
   error: {},
+  success: false,
 };
 
 export const loginUser = createAsyncThunk(
@@ -35,6 +40,18 @@ export const loginUser = createAsyncThunk(
   async (body: ILogin, { rejectWithValue }) => {
     try {
       const response = await loginAPI(body);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const refreshToken = createAsyncThunk(
+  "user/refreshToken",
+  async (body: string, { rejectWithValue }) => {
+    try {
+      const response = await refreshTokenAPI(body);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -69,7 +86,12 @@ export const uploadImage = createAsyncThunk(
 const blogSlice = createSlice({
   name: "blog",
   initialState,
-  reducers: {},
+  reducers: {
+    setSuccessError: (state) => {
+      state.success = false;
+      state.error = {};
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(loginUser.pending, (state, action) => {
@@ -77,11 +99,13 @@ const blogSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.auth = action.payload;
-        const { user, access_token } = action.payload;
+        const { user, access_token, refresh_token } = action.payload;
         setSessionStorage(user);
-        setTokenCookie("token", access_token, 2);
+        setTokenCookie("token", access_token, 1000);
+        setTokenCookie("refresh_token", refresh_token, 30);
         state.isLoading = false;
         state.error = {};
+        state.success = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -93,6 +117,7 @@ const blogSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = {};
+        state.success = true;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -109,5 +134,7 @@ const blogSlice = createSlice({
       });
   },
 });
+
+export const { setSuccessError } = blogSlice.actions;
 
 export default blogSlice.reducer;

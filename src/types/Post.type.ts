@@ -2,7 +2,7 @@ export interface IPost {
   _id?: string;
   title: string;
   desc: string;
-  status?: number;
+  status: number;
   user_id?: string;
 }
 

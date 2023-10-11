@@ -2,13 +2,14 @@
 
 import { ButtonComponent, InputComponent } from "@/components";
 import { RootState, useAppDispatch } from "@/redux/store";
-import { registerUser } from "@/redux/user/userSlice";
+import { registerUser, setSuccessError } from "@/redux/user/userSlice";
 import { IRegister } from "@/types/User.type";
 import { schema } from "@/utils/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Typography } from "antd";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
@@ -25,8 +26,7 @@ const Register = () => {
   ]);
   const dispatch = useAppDispatch();
   const { Title } = Typography;
-  const [loading, setLoading] = useState(false);
-  const { error } = useSelector((state: RootState) => state.user);
+  const { error, success } = useSelector((state: RootState) => state.user);
   const route = useRouter();
   const form = useForm<IRegister>({
     mode: "all",
@@ -49,8 +49,16 @@ const Register = () => {
     }
   }, [error]);
 
+  useEffect(() => {
+    if (success) {
+      toast.success("Register successfully");
+    }
+  }, [success]);
+
   const onSubmit = (data: IRegister) => {
-    dispatch(registerUser(data));
+    dispatch(registerUser(data)).then(() => {
+      dispatch(setSuccessError());
+    });
   };
 
   return (
@@ -61,7 +69,7 @@ const Register = () => {
         layout="vertical"
         scrollToFirstError
       >
-        <Title style={{ textAlign: "center" }}>Register</Title>
+        <Title style={{ textAlign: "center", marginTop: "0" }}>Register</Title>
         <Form.Item
           name="email"
           validateStatus={errors.email ? "error" : ""}
@@ -120,6 +128,11 @@ const Register = () => {
           htmlType="submit"
           content="Register"
         />
+        <Link href={"/login"}>
+          <Title className={styles.text} italic level={5}>
+            Login
+          </Title>
+        </Link>
       </Form>
       <div>
         <ToastContainer limit={2} />

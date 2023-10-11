@@ -2,11 +2,12 @@
 
 import { ButtonComponent, InputComponent } from "@/components";
 import { RootState, useAppDispatch } from "@/redux/store";
-import { loginUser } from "@/redux/user/userSlice";
+import { loginUser, setSuccessError } from "@/redux/user/userSlice";
 import { ILogin } from "@/types/User.type";
 import { schema } from "@/utils/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Form, message } from "antd";
+import { Form, Typography } from "antd";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -17,15 +18,16 @@ import styles from "./page.module.css";
 
 const Login = () => {
   const loginSchema = schema.pick(["email", "password"]);
-  const [messageApi, contextHolder] = message.useMessage();
+  const { Title } = Typography;
   const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.user);
-  const { error } = useSelector((state: RootState) => state.user);
+  const { error, success } = useSelector((state: RootState) => state.user);
   const auth = user.auth.access_token;
+  const route = useRouter();
 
   useEffect(() => {
     if (auth) {
-      route.push("blog");
+      route.push("todo");
     }
   }, [auth]);
 
@@ -35,7 +37,12 @@ const Login = () => {
     }
   }, [error]);
 
-  const route = useRouter();
+  useEffect(() => {
+    if (success) {
+      toast.success("Login successfully");
+    }
+  }, [success]);
+
   const form = useForm<ILogin>({
     mode: "all",
     defaultValues: {
@@ -54,17 +61,19 @@ const Login = () => {
       password: data.password,
     };
 
-    dispatch(loginUser(loginData));
+    dispatch(loginUser(loginData)).then(() => {
+      dispatch(setSuccessError());
+    });
   };
 
   return (
     <div className={styles.container}>
-      {contextHolder}
       <Form
         onFinish={handleSubmit(onSubmit)}
         className={styles.login_form}
         layout="vertical"
       >
+        <Title style={{ textAlign: "center", marginTop: "0" }}>Login</Title>
         <Form.Item
           name="email"
           validateStatus={errors.email ? "error" : ""}
@@ -91,7 +100,16 @@ const Login = () => {
             isPassword
           />
         </Form.Item>
-        <ButtonComponent htmlType="submit" content="Login" />
+        <ButtonComponent
+          className={styles.button}
+          htmlType="submit"
+          content="Login"
+        />
+        <Link href={"/register"}>
+          <Title className={styles.text} italic level={5}>
+            Register account
+          </Title>
+        </Link>
       </Form>
       <ToastContainer limit={2} />
     </div>

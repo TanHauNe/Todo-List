@@ -1,32 +1,53 @@
-import { deleteData, getData, postData, putData } from "@/utils/http";
+import {
+  deleteData,
+  getData,
+  getListData,
+  postData,
+  putData,
+} from "@/utils/http";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { IPost } from "../../types/Post.type";
+import { status } from "@/configs/status";
 
 const initEditPost: IPost = {
   title: "",
   desc: "",
-  status: 1,
+  status: status.doNot,
 };
 
 interface BlogState {
   postList: IPost[];
   editPost: IPost;
   isLoading: boolean;
-  errorMessage?: string;
+  error: any;
+  success: boolean;
 }
 
 const initialState: BlogState = {
   postList: [],
   editPost: initEditPost,
   isLoading: false,
-  errorMessage: "",
+  error: {},
+  success: false,
 };
 
 export const getPostList = createAsyncThunk(
   "blog/getPostList",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await getData();
+      const response = await getListData();
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getPost = createAsyncThunk(
+  "blog/getPost",
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const response = await getData(userId);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -82,10 +103,13 @@ const blogSlice = createSlice({
       const foundPost =
         state.postList.find((post) => post._id === postId) || initEditPost;
       state.editPost = foundPost;
-      state.errorMessage = "";
     },
     cancelEditPost: (state) => {
       state.editPost = initEditPost;
+    },
+    setSuccess: (state) => {
+      state.success = false;
+      state.error = {};
     },
   },
   extraReducers(builder) {
@@ -100,18 +124,28 @@ const blogSlice = createSlice({
       .addCase(getPostList.rejected, (state, action) => {
         state.isLoading = false;
       })
+      .addCase(getPost.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(getPost.fulfilled, (state, action) => {
+        state.editPost = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(getPost.rejected, (state, action) => {
+        state.isLoading = false;
+      })
       .addCase(addPost.pending, (state, action) => {
         state.isLoading = true;
-        state.errorMessage = "";
       })
       .addCase(addPost.fulfilled, (state, action) => {
         state.postList.push(action.payload);
         state.isLoading = false;
-        state.errorMessage = "";
+        state.error = {};
+        state.success = true;
       })
       .addCase(addPost.rejected, (state, action) => {
         state.isLoading = false;
-        state.errorMessage = "Tên tiêu đề đã tồn tại";
+        state.error = action.payload;
       })
       .addCase(updatePost.pending, (state, action) => {
         state.isLoading = true;
@@ -126,9 +160,12 @@ const blogSlice = createSlice({
         }
         state.editPost = initEditPost;
         state.isLoading = false;
+        state.error = {};
+        state.success = true;
       })
       .addCase(updatePost.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.payload;
       })
       .addCase(deletePost.pending, (state, action) => {
         state.isLoading = true;
@@ -144,6 +181,6 @@ const blogSlice = createSlice({
   },
 });
 
-export const { cancelEditPost, startEditPost } = blogSlice.actions;
+export const { cancelEditPost, startEditPost, setSuccess } = blogSlice.actions;
 
 export default blogSlice.reducer;

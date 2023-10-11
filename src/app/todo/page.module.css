@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.create_button {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background-color: azure;
+  border-radius: 50%;
+  border: 1px solid rgb(119, 185, 185);
+  font-size: 30px;
+  font-weight: bold;
+  right: 30px;
+  bottom: 30px;
+  cursor: pointer;
+}
