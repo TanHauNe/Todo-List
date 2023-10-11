@@ -1,6 +1,7 @@
 "use client";
 
 import { InputComponent } from "@/components";
+import { status } from "@/configs/status";
 import { getPost, setSuccess, updatePost } from "@/redux/blog/blogSlice";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { IPost } from "@/types/Post.type";
@@ -15,7 +16,6 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
-import { status } from "@/configs/status";
 
 const Edit = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -65,7 +65,7 @@ const Edit = ({ params }: { params: { id: string } }) => {
     defaultValues: {
       title: editPost?.title || "",
       desc: editPost?.desc || "",
-      status: editPost?.status || 1,
+      status: editPost?.status || status.doNot,
     },
     mode: "all",
     resolver: yupResolver(createPostSchema),

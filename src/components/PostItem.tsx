@@ -5,6 +5,7 @@ import { IPost } from "../types/Post.type";
 import styles from "./PostItem.module.css";
 import { Tag, Typography } from "antd";
 import { ButtonComponent } from ".";
+import { status } from "@/configs/status";
 
 interface PostItemType {
   post: IPost;
@@ -18,24 +19,24 @@ const PostItem = ({
   handleStartEditPost,
 }: PostItemType) => {
   const { Text, Title } = Typography;
-  const [status, setStatus] = useState({
+  const [statusArray, setStatusArray] = useState({
     color: "",
     text: "",
   });
 
   useEffect(() => {
-    if (post.status === 2) {
-      setStatus({
+    if (post.status === status.doing) {
+      setStatusArray({
         color: "processing",
         text: "Doing",
       });
-    } else if (post.status === 3) {
-      setStatus({
+    } else if (post.status === status.done) {
+      setStatusArray({
         color: "success",
         text: "Done",
       });
     } else {
-      setStatus({
+      setStatusArray({
         color: "default",
         text: "Do not",
       });
@@ -52,8 +53,8 @@ const PostItem = ({
           {post.desc}
         </Text>
         <div className={styles.button_group}>
-          <Tag color={status.color} className={styles.button_item}>
-            {status.text}
+          <Tag color={statusArray.color} className={styles.button_item}>
+            {statusArray.text}
           </Tag>
           <ButtonComponent
             className={styles.button_item}

@@ -63,7 +63,7 @@ const Create = () => {
       status: undefined,
     },
     mode: "all",
-    resolver: yupResolver(createPostSchema) as any,
+    resolver: yupResolver(createPostSchema),
   });
   const { control, handleSubmit, formState, reset } = form;
   const { errors } = formState;

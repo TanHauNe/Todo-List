@@ -7,11 +7,12 @@ import {
 } from "@/utils/http";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { IPost } from "../../types/Post.type";
+import { status } from "@/configs/status";
 
 const initEditPost: IPost = {
   title: "",
   desc: "",
-  status: 1,
+  status: status.doNot,
 };
 
 interface BlogState {
