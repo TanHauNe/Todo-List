@@ -5,6 +5,7 @@ export interface IInput {
   placeholder?: string;
   control: any;
   isPassword?: boolean;
+  className?: string;
 }
 
 export interface IButton {
@@ -14,4 +15,6 @@ export interface IButton {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   danger?: boolean;
   className?: string;
+  disabled?: boolean;
+  loading?: boolean;
 }

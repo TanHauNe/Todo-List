@@ -26,7 +26,9 @@ const Register = () => {
   ]);
   const dispatch = useAppDispatch();
   const { Title } = Typography;
-  const { error, success } = useSelector((state: RootState) => state.user);
+  const { error, success, isLoading } = useSelector(
+    (state: RootState) => state.user
+  );
   const route = useRouter();
   const form = useForm<IRegister>({
     mode: "all",
@@ -124,6 +126,7 @@ const Register = () => {
           />
         </Form.Item>
         <ButtonComponent
+          loading={isLoading ? true : false}
           className={styles.button}
           htmlType="submit"
           content="Register"

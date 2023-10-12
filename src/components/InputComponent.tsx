@@ -3,7 +3,13 @@ import { Input } from "antd";
 import { Controller } from "react-hook-form";
 import { IInput } from "../types/Common.type";
 
-const InputComponent = ({ name, control, placeholder, isPassword }: IInput) => {
+const InputComponent = ({
+  name,
+  control,
+  placeholder,
+  isPassword,
+  className,
+}: IInput) => {
   return (
     <div>
       <Controller
@@ -12,6 +18,7 @@ const InputComponent = ({ name, control, placeholder, isPassword }: IInput) => {
         render={({ field }) =>
           isPassword ? (
             <Input.Password
+              className={className || ""}
               placeholder={placeholder}
               iconRender={(visible) =>
                 visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
@@ -19,7 +26,11 @@ const InputComponent = ({ name, control, placeholder, isPassword }: IInput) => {
               {...field}
             />
           ) : (
-            <Input placeholder={placeholder} {...field} />
+            <Input
+              className={className || ""}
+              placeholder={placeholder}
+              {...field}
+            />
           )
         }
       />

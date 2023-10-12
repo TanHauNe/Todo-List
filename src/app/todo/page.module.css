@@ -1,12 +1,33 @@
 .container {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.list_container {
+  display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   gap: 10px;
   margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-.create_button {
+.search_form {
+  display: flex;
+  background-color: rgb(119, 185, 185);
+  padding: 20px;
+  justify-content: space-between;
+  border-radius: 20px;
+  gap: 10px;
+}
+
+.search_input {
+  width: 500px;
+}
+
+.circle_button {
   position: fixed;
   display: flex;
   align-items: center;
@@ -18,7 +39,38 @@
   border: 1px solid rgb(119, 185, 185);
   font-size: 30px;
   font-weight: bold;
+  cursor: pointer;
+}
+
+.logout_button {
   right: 30px;
   bottom: 30px;
-  cursor: pointer;
+}
+
+.create_button {
+  right: 30px;
+  bottom: 90px;
+}
+
+.paginate_group {
+  position: fixed;
+  bottom: 30px;
+  display: flex;
+  gap: 10px;
+}
+
+.paginate_button {
+  width: 80px;
+}
+
+@media only screen and (max-width: 1500px) {
+  .search_input {
+    width: 400px;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .search_input {
+    width: 300px;
+  }
 }

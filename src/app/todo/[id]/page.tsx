@@ -1,21 +1,22 @@
 "use client";
 
-import { InputComponent } from "@/components";
+import { ButtonComponent, InputComponent } from "@/components";
 import { status } from "@/configs/status";
 import { getPost, setSuccess, updatePost } from "@/redux/blog/blogSlice";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { IPost } from "@/types/Post.type";
-import { getSessionStorage } from "@/utils/cookie";
+import { getSessionStorage, getTokenFromCookie } from "@/utils/cookie";
 import { schema } from "@/utils/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Form, Input, Select, Typography } from "antd";
+import { Form, Input, Select, Typography } from "antd";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
+import Loading from "@/app/loading";
 
 const Edit = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -25,12 +26,18 @@ const Edit = ({ params }: { params: { id: string } }) => {
   const [userId, setUserId] = useState("");
   const dispatch = useAppDispatch();
   const editPost = useSelector((state: RootState) => state.blog.editPost);
-  const { error, success } = useSelector((state: RootState) => state.blog);
+  const { error, success, isLoading } = useSelector(
+    (state: RootState) => state.blog
+  );
   const route = useRouter();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const user = getSessionStorage();
+      const accessToken = getTokenFromCookie("token");
+      if (!accessToken) {
+        route.push("/login");
+      }
       return setUserId(user?._id || "");
     }
   }, []);
@@ -46,7 +53,6 @@ const Edit = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     if (success) {
       toast.success("Update successfully");
-      reset();
       route.push("/todo");
     }
   }, [success]);
@@ -90,103 +96,95 @@ const Edit = ({ params }: { params: { id: string } }) => {
         postId: editPost._id || "",
         body: postData,
       })
-    )
-      .then(() => {
-        dispatch(
-          updatePost({
-            postId: editPost._id || "",
-            body: postData,
-          })
-        );
-      })
-      .then(() => {
-        dispatch(setSuccess());
-      });
+    ).then(() => {
+      dispatch(setSuccess());
+    });
   };
 
   const handleCancelEditPost = () => {
-    route.push("/list");
+    route.push("/todo");
   };
   return (
-    <div className={styles.container}>
-      <Form
-        className={styles.post_form}
-        onFinish={handleSubmit(onSubmit)}
-        layout="vertical"
-      >
-        <Title style={{ textAlign: "center", marginTop: "0" }}>Edit Post</Title>
-        <Form.Item
-          name="title"
-          validateStatus={errors.title ? "error" : ""}
-          label="Title"
-          help={errors.title?.message}
+    <Suspense fallback={<Loading />}>
+      <div className={styles.container}>
+        <Form
+          className={styles.post_form}
+          onFinish={handleSubmit(onSubmit)}
+          layout="vertical"
         >
-          <InputComponent
-            placeholder="Enter title"
+          <Title style={{ textAlign: "center", marginTop: "0" }}>
+            Edit Post
+          </Title>
+          <Form.Item
             name="title"
-            control={control}
-          />
-        </Form.Item>
-        <Form.Item
-          name="desc"
-          validateStatus={errors.desc ? "error" : ""}
-          help={errors.desc?.message}
-          label="Description"
-        >
-          <Controller
+            validateStatus={errors.title ? "error" : ""}
+            label="Title"
+            help={errors.title?.message}
+          >
+            <InputComponent
+              placeholder="Enter title"
+              name="title"
+              control={control}
+            />
+          </Form.Item>
+          <Form.Item
             name="desc"
-            control={control}
-            render={({ field }) => (
-              <TextArea
-                style={{ height: 120, margin: "0" }}
-                placeholder="Enter description"
-                {...field}
-              />
-            )}
-          />
-        </Form.Item>
+            validateStatus={errors.desc ? "error" : ""}
+            help={errors.desc?.message}
+            label="Description"
+          >
+            <Controller
+              name="desc"
+              control={control}
+              render={({ field }) => (
+                <TextArea
+                  style={{ height: 120, margin: "0" }}
+                  placeholder="Enter description"
+                  {...field}
+                />
+              )}
+            />
+          </Form.Item>
 
-        <Form.Item
-          name="status"
-          validateStatus={errors.status ? "error" : ""}
-          help={errors.status?.message}
-          label="Status"
-        >
-          <Controller
+          <Form.Item
             name="status"
-            control={control}
-            render={({ field }) => (
-              <Select
-                placeholder="Choose one"
-                style={{ width: 120 }}
-                options={optionsSelect}
-                {...field}
-              />
-            )}
-          />
-        </Form.Item>
+            validateStatus={errors.status ? "error" : ""}
+            help={errors.status?.message}
+            label="Status"
+          >
+            <Controller
+              name="status"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  placeholder="Choose one"
+                  style={{ width: 120 }}
+                  options={optionsSelect}
+                  {...field}
+                />
+              )}
+            />
+          </Form.Item>
 
-        <div className={styles.button_group}>
-          <Button
-            className={styles.button_item}
-            htmlType="submit"
-            type="primary"
-          >
-            Update
-          </Button>
-          <Button
-            className={styles.button_item}
-            onClick={handleCancelEditPost}
-            danger
-            htmlType="reset"
-            type="primary"
-          >
-            Cancel
-          </Button>
-        </div>
-      </Form>
-      <ToastContainer limit={2} />
-    </div>
+          <div className={styles.button_group}>
+            <ButtonComponent
+              loading={isLoading ? true : false}
+              className={styles.button_item}
+              htmlType="submit"
+              content="Update"
+            />
+            <ButtonComponent
+              className={styles.button_item}
+              htmlType="button"
+              content="Cancel"
+              onClick={handleCancelEditPost}
+              danger
+            />
+          </div>
+        </Form>
+        <ToastContainer limit={2} />
+      </div>
+    </Suspense>
   );
 };
 

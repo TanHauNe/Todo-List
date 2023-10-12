@@ -10,3 +10,9 @@ export interface ICreatePost {
   accessToken: string;
   userId: string;
 }
+
+export interface ISearchParams {
+  key_search: string;
+  page: number;
+  limited: number;
+}

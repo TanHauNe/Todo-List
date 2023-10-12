@@ -21,9 +21,12 @@ const Login = () => {
   const { Title } = Typography;
   const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.user);
-  const { error, success } = useSelector((state: RootState) => state.user);
+  const { error, success, isLoading } = useSelector(
+    (state: RootState) => state.user
+  );
   const auth = user.auth.access_token;
   const route = useRouter();
+
 
   useEffect(() => {
     if (auth) {
@@ -101,6 +104,7 @@ const Login = () => {
           />
         </Form.Item>
         <ButtonComponent
+          loading={isLoading ? true : false}
           className={styles.button}
           htmlType="submit"
           content="Login"

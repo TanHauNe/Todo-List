@@ -22,6 +22,10 @@ function getTokenFromCookie(key: string): string | null {
   return tokenFromCookie;
 }
 
+function clearCookie(key: string) {
+  document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+}
+
 function setSessionStorage(user: IUser) {
   const userDataJSON = JSON.stringify(user);
   sessionStorage.setItem("userData", userDataJSON);
@@ -40,9 +44,15 @@ function getSessionStorage() {
   }
 }
 
+function clearSessionStorage() {
+  sessionStorage.removeItem("userData");
+}
+
 export {
   getSessionStorage,
   getTokenFromCookie,
   setSessionStorage,
   setTokenCookie,
+  clearCookie,
+  clearSessionStorage,
 };

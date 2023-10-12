@@ -39,3 +39,15 @@
   width: 120px;
   height: 39px;
 }
+
+@media only screen and (max-width: 1500px) {
+  .post_form {
+    width: 65%;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .post_form {
+    width: 80%;
+  }
+}
