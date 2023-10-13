@@ -109,7 +109,7 @@ const blogSlice = createSlice({
     cancelEditPost: (state) => {
       state.editPost = initEditPost;
     },
-    setSuccess: (state) => {
+    setClearState: (state) => {
       state.success = false;
       state.error = {};
     },
@@ -122,7 +122,7 @@ const blogSlice = createSlice({
       .addCase(getPostList.fulfilled, (state, action) => {
         state.postList = action?.payload?.to_dos;
         state.total = action?.payload?.total;
-        
+
         state.isLoading = false;
       })
       .addCase(getPostList.rejected, (state, action) => {
@@ -185,6 +185,7 @@ const blogSlice = createSlice({
   },
 });
 
-export const { cancelEditPost, startEditPost, setSuccess } = blogSlice.actions;
+export const { cancelEditPost, startEditPost, setClearState } =
+  blogSlice.actions;
 
 export default blogSlice.reducer;

@@ -14,6 +14,7 @@ interface userState {
   isLoading: boolean;
   error: any;
   success: boolean;
+  urlImg: string;
 }
 
 const initialState: userState = {
@@ -34,6 +35,7 @@ const initialState: userState = {
   isLoading: false,
   error: {},
   success: false,
+  urlImg: "",
 };
 
 export const loginUser = createAsyncThunk(
@@ -86,9 +88,10 @@ export const editProfile = createAsyncThunk(
 
 export const uploadImage = createAsyncThunk(
   "user/uploadImage",
-  async (body: any, { rejectWithValue }) => {
+  async (body: FormData, { rejectWithValue }) => {
     try {
       const response = await postImage(body);
+
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -96,13 +99,14 @@ export const uploadImage = createAsyncThunk(
   }
 );
 
-const blogSlice = createSlice({
-  name: "blog",
+const userSlice = createSlice({
+  name: "user",
   initialState,
   reducers: {
-    setSuccessError: (state) => {
+    setClearState: (state) => {
       state.success = false;
       state.error = {};
+      state.urlImg = "";
     },
   },
   extraReducers(builder) {
@@ -155,6 +159,7 @@ const blogSlice = createSlice({
       })
       .addCase(uploadImage.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.urlImg = action.payload.url_img;
       })
       .addCase(uploadImage.rejected, (state, action) => {
         state.isLoading = false;
@@ -162,6 +167,6 @@ const blogSlice = createSlice({
   },
 });
 
-export const { setSuccessError } = blogSlice.actions;
+export const { setClearState } = userSlice.actions;
 
-export default blogSlice.reducer;
+export default userSlice.reducer;

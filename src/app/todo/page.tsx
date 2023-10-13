@@ -1,7 +1,7 @@
 "use client";
 
 import { ButtonComponent, InputComponent, PostItem } from "@/components";
-import { deletePost, getPostList, setSuccess } from "@/redux/blog/blogSlice";
+import { deletePost, getPostList, setClearState } from "@/redux/blog/blogSlice";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { ISearchParams } from "@/types/Post.type";
 import {
@@ -67,7 +67,7 @@ const List = async ({
   };
 
   const handleStartEditPost = (postId: string) => {
-    dispatch(setSuccess());
+    dispatch(setClearState());
     route.replace(`todo/${postId}`);
   };
 

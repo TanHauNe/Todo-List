@@ -2,7 +2,7 @@
 
 import { ButtonComponent, InputComponent } from "@/components";
 import { status } from "@/configs/status";
-import { addPost, setSuccess } from "@/redux/blog/blogSlice";
+import { addPost, setClearState } from "@/redux/blog/blogSlice";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { IPost } from "@/types/Post.type";
 import { getSessionStorage, getTokenFromCookie } from "@/utils/cookie";
@@ -77,7 +77,7 @@ const Create = () => {
     };
 
     dispatch(addPost(addPostData)).then(() => {
-      dispatch(setSuccess());
+      dispatch(setClearState());
     });
   };
 

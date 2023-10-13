@@ -2,7 +2,7 @@
 
 import { ButtonComponent, InputComponent } from "@/components";
 import { status } from "@/configs/status";
-import { getPost, setSuccess, updatePost } from "@/redux/blog/blogSlice";
+import { getPost, setClearState, updatePost } from "@/redux/blog/blogSlice";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { IPost } from "@/types/Post.type";
 import { getSessionStorage, getTokenFromCookie } from "@/utils/cookie";
@@ -93,7 +93,7 @@ const Edit = ({ params }: { params: { id: string } }) => {
         body: postData,
       })
     ).then(() => {
-      dispatch(setSuccess());
+      dispatch(setClearState());
     });
   };
 

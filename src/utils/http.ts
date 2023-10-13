@@ -179,11 +179,14 @@ export async function editProfileAPI(data: any): Promise<ApiResponse> {
   }
 }
 
-export async function postImage(data: any): Promise<ApiResponse> {
+export async function postImage(formData: FormData): Promise<ApiResponse> {
   try {
     const response: AxiosResponse<ApiResponse> = await axios.post(
       `${apiUrl}/api/upload/image`,
-      data
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
     );
 
     return response.data;

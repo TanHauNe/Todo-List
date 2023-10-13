@@ -2,12 +2,16 @@
 
 import { ButtonComponent, InputComponent } from "@/components";
 import { RootState, useAppDispatch } from "@/redux/store";
-import { editProfile, setSuccessError } from "@/redux/user/userSlice";
+import {
+  editProfile,
+  setClearState,
+  uploadImage,
+} from "@/redux/user/userSlice";
 import { IEditProfile, IUser } from "@/types/User.type";
 import { getSessionStorage, getTokenFromCookie } from "@/utils/cookie";
 import { schema } from "@/utils/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Form, Typography, Upload } from "antd";
+import { Form, Image, Typography, Upload } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -15,14 +19,16 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
+import { RcFile } from "antd/es/upload";
 
 const Profile = () => {
   const editSchema = schema.pick(["email", "full_name", "url_img"]);
   const { Title } = Typography;
   const [user, setUser] = useState<IUser>();
+  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const route = useRouter();
-  const { error, success, isLoading } = useSelector(
+  const { error, success, isLoading, urlImg } = useSelector(
     (state: RootState) => state.user
   );
   const form = useForm<IEditProfile>({
@@ -64,13 +70,47 @@ const Profile = () => {
     reset(user);
   }, [user]);
 
-  const { control, handleSubmit, formState, reset } = form;
+  useEffect(() => {
+    if (urlImg) {
+      setValue("url_img", urlImg);
+    }
+  }, [urlImg]);
+
+  const { control, handleSubmit, formState, reset, setValue } = form;
   const { errors } = formState;
 
   const onSubmit = (data: IEditProfile) => {
     dispatch(editProfile(data)).then(() => {
-      dispatch(setSuccessError());
+      dispatch(setClearState());
     });
+  };
+
+  const beforeUpload = (file: RcFile) => {
+    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+    if (!isJpgOrPng) {
+      toast.warning("You can only upload JPG/PNG file!");
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      toast.warning("Image must smaller than 2MB!");
+    }
+    return isJpgOrPng && isLt2M;
+  };
+
+  const onChange = (info: any) => {
+    console.log(info.file.originFileObj);
+
+    if (info.file.status !== "uploading") {
+      console.log("uploading");
+    }
+    if (info.file.status === "done") {
+      console.log("done");
+      const formData = new FormData();
+      formData.append("file", info.file.originFileObj);
+      dispatch(uploadImage(formData));
+    } else if (info.file.status === "error") {
+      console.log("error");
+    }
   };
 
   return (
@@ -78,10 +118,33 @@ const Profile = () => {
       <Form
         onFinish={handleSubmit(onSubmit)}
         className={styles.login_form}
-        layout="horizontal"
-        // layout="vertical"
+        // layout="horizontal"
+        layout="vertical"
       >
         <Title style={{ textAlign: "center", marginTop: "0" }}>Profile</Title>
+        <div className={styles.upload_group}>
+          <Image
+            width={100}
+            height={100}
+            style={{ borderRadius: "50%" }}
+            src={urlImg || user?.url_img}
+            alt=""
+          />
+          <Upload
+            name="avatar"
+            className="avatar-uploader"
+            showUploadList={false}
+            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+            beforeUpload={beforeUpload}
+            onChange={onChange}
+          >
+            <ButtonComponent
+              className={styles.upload_button}
+              htmlType="button"
+              content="Upload file"
+            />
+          </Upload>
+        </div>
         <Form.Item
           name="email"
           validateStatus={errors.email ? "error" : ""}
@@ -107,21 +170,7 @@ const Profile = () => {
             control={control}
           />
         </Form.Item>
-        <Form.Item
-          className={styles.upload_group}
-          name="url_img"
-          validateStatus={errors.url_img ? "error" : ""}
-          help={errors.url_img?.message}
-          label="Url image"
-        >
-          <Upload>
-            <ButtonComponent
-              className={styles.upload_button}
-              htmlType="button"
-              content="Upload file"
-            />
-          </Upload>
-        </Form.Item>
+
         <ButtonComponent
           loading={isLoading ? true : false}
           className={styles.button}

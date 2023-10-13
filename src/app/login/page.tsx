@@ -2,7 +2,7 @@
 
 import { ButtonComponent, InputComponent } from "@/components";
 import { RootState, useAppDispatch } from "@/redux/store";
-import { loginUser, setSuccessError } from "@/redux/user/userSlice";
+import { loginUser, setClearState } from "@/redux/user/userSlice";
 import { ILogin } from "@/types/User.type";
 import { schema } from "@/utils/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -64,7 +64,7 @@ const Login = () => {
     };
 
     dispatch(loginUser(loginData)).then(() => {
-      dispatch(setSuccessError());
+      dispatch(setClearState());
     });
   };
 

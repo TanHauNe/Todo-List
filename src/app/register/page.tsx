@@ -2,7 +2,7 @@
 
 import { ButtonComponent, InputComponent } from "@/components";
 import { RootState, useAppDispatch } from "@/redux/store";
-import { registerUser, setSuccessError } from "@/redux/user/userSlice";
+import { registerUser, setClearState } from "@/redux/user/userSlice";
 import { IRegister } from "@/types/User.type";
 import { schema } from "@/utils/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -59,7 +59,7 @@ const Register = () => {
 
   const onSubmit = (data: IRegister) => {
     dispatch(registerUser(data)).then(() => {
-      dispatch(setSuccessError());
+      dispatch(setClearState());
     });
   };
 
