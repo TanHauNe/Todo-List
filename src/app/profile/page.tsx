@@ -7,7 +7,7 @@ import { IEditProfile, IUser } from "@/types/User.type";
 import { getSessionStorage, getTokenFromCookie } from "@/utils/cookie";
 import { schema } from "@/utils/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Form, Typography } from "antd";
+import { Form, Typography, Upload } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -78,7 +78,8 @@ const Profile = () => {
       <Form
         onFinish={handleSubmit(onSubmit)}
         className={styles.login_form}
-        layout="vertical"
+        layout="horizontal"
+        // layout="vertical"
       >
         <Title style={{ textAlign: "center", marginTop: "0" }}>Profile</Title>
         <Form.Item
@@ -107,16 +108,19 @@ const Profile = () => {
           />
         </Form.Item>
         <Form.Item
+          className={styles.upload_group}
           name="url_img"
           validateStatus={errors.url_img ? "error" : ""}
           help={errors.url_img?.message}
           label="Url image"
         >
-          <InputComponent
-            placeholder="Enter full name"
-            name="url_img"
-            control={control}
-          />
+          <Upload>
+            <ButtonComponent
+              className={styles.upload_button}
+              htmlType="button"
+              content="Upload file"
+            />
+          </Upload>
         </Form.Item>
         <ButtonComponent
           loading={isLoading ? true : false}

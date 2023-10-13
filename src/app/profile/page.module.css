@@ -27,6 +27,21 @@
   justify-content: end;
 }
 
+.upload_group {
+  display: flex;
+}
+
+.upload_button {
+  margin: 0;
+  background-color: white;
+  border: 1px solid black;
+  color:black
+}
+
+.upload_button:hover{
+  background-color: rgb(201, 192, 192) !important;
+}
+
 @media only screen and (max-width: 1500px) {
   .login_form {
     width: 50%;
