@@ -126,7 +126,7 @@ const Register = () => {
           />
         </Form.Item>
         <ButtonComponent
-          loading={isLoading ? true : false}
+          loading={isLoading}
           className={styles.button}
           htmlType="submit"
           content="Register"

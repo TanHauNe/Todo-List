@@ -59,13 +59,6 @@ const List = async ({
       limited: limit,
     };
 
-    if (typeof window !== "undefined") {
-      const accessToken = getTokenFromCookie("token");
-      if (!accessToken) {
-        route.push("/login");
-      }
-    }
-
     dispatch(getPostList(searchData));
   }, [page, search]);
 
@@ -112,7 +105,7 @@ const List = async ({
         />
 
         <ButtonComponent
-          loading={isLoading ? true : false}
+          loading={isLoading}
           htmlType="submit"
           className={styles.search_button}
           content="Search"

@@ -34,10 +34,6 @@ const Edit = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const user = getSessionStorage();
-      const accessToken = getTokenFromCookie("token");
-      if (!accessToken) {
-        route.push("/login");
-      }
       return setUserId(user?._id || "");
     }
   }, []);
@@ -138,7 +134,7 @@ const Edit = ({ params }: { params: { id: string } }) => {
               control={control}
               render={({ field }) => (
                 <TextArea
-                  style={{ height: 120, margin: "0" }}
+                  style={{ height: 120, margin: "0", resize: "none" }}
                   placeholder="Enter description"
                   {...field}
                 />
@@ -167,7 +163,7 @@ const Edit = ({ params }: { params: { id: string } }) => {
           </Form.Item>
           <div className={styles.button_group}>
             <ButtonComponent
-              loading={isLoading ? true : false}
+              loading={isLoading}
               className={styles.button_item}
               htmlType="submit"
               content="Update"

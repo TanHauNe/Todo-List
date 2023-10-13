@@ -32,10 +32,6 @@ const Create = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const user = getSessionStorage();
-      const accessToken = getTokenFromCookie("token");
-      if (!accessToken) {
-        route.push("/login");
-      }
       return setUserId(user?._id || "");
     }
   }, []);
@@ -149,7 +145,7 @@ const Create = () => {
         </Form.Item>
 
         <ButtonComponent
-          loading={isLoading ? true : false}
+          loading={isLoading}
           htmlType="submit"
           content="Add post"
         />
