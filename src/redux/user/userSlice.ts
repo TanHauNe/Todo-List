@@ -1,6 +1,7 @@
 import { setSessionStorage, setTokenCookie } from "@/utils/cookie";
-import { IAuth, ILogin, IRegister } from "../../types/User.type";
+import { IAuth, IEditProfile, ILogin, IRegister } from "../../types/User.type";
 import {
+  editProfileAPI,
   loginAPI,
   postImage,
   refreshTokenAPI,
@@ -71,6 +72,18 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+export const editProfile = createAsyncThunk(
+  "user/editProfile",
+  async (body: IEditProfile, { rejectWithValue }) => {
+    try {
+      const response = await editProfileAPI(body);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const uploadImage = createAsyncThunk(
   "user/uploadImage",
   async (body: any, { rejectWithValue }) => {
@@ -120,6 +133,20 @@ const blogSlice = createSlice({
         state.success = true;
       })
       .addCase(registerUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(editProfile.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(editProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        setSessionStorage(action.payload);
+        state.auth.user = action.payload;
+        state.error = {};
+        state.success = true;
+      })
+      .addCase(editProfile.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })

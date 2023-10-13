@@ -161,6 +161,24 @@ export async function refreshTokenAPI(data: any): Promise<ApiResponse> {
   }
 }
 
+export async function editProfileAPI(data: any): Promise<ApiResponse> {
+  try {
+    const response: AxiosResponse<ApiResponse> = await axios.put(
+      `${apiUrl}/api/users/${userId}`,
+      data
+    );
+
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      console.error("Lỗi từ API:", error.response.data);
+    } else {
+      console.error("Lỗi không thể kết nối đến server:", error.message);
+    }
+    throw error;
+  }
+}
+
 export async function postImage(data: any): Promise<ApiResponse> {
   try {
     const response: AxiosResponse<ApiResponse> = await axios.post(

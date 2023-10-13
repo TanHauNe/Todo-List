@@ -41,8 +41,6 @@ const Create = () => {
   }, []);
 
   useEffect(() => {
-    console.log(error);
-
     if (error?.message) {
       toast.warning(error?.message);
     }
