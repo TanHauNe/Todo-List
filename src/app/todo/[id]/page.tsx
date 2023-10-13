@@ -165,7 +165,6 @@ const Edit = ({ params }: { params: { id: string } }) => {
               )}
             />
           </Form.Item>
-
           <div className={styles.button_group}>
             <ButtonComponent
               loading={isLoading ? true : false}
