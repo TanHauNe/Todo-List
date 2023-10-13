@@ -7,13 +7,13 @@
 }
 
 .login_form {
-  width: 35%;
+  margin-top: 50px;
+  width: 50%;
+  height: 100vh;
   background-color: azure;
   display: flex;
   flex-direction: column;
   padding: 30px;
-  border: 2px solid rgb(119, 185, 185);
-  border-radius: 20px;
 }
 
 .button {
