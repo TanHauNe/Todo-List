@@ -21,7 +21,9 @@ const Login = () => {
   const { Title } = Typography;
   const dispatch = useAppDispatch();
   const user = useSelector((state: RootState) => state.user);
-  const { error, success } = useSelector((state: RootState) => state.user);
+  const { error, success, isLoading } = useSelector(
+    (state: RootState) => state.user
+  );
   const auth = user.auth.access_token;
   const route = useRouter();
 
@@ -101,6 +103,7 @@ const Login = () => {
           />
         </Form.Item>
         <ButtonComponent
+          loading={isLoading}
           className={styles.button}
           htmlType="submit"
           content="Login"

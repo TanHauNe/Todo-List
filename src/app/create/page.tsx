@@ -1,13 +1,15 @@
 "use client";
 
 import { ButtonComponent, InputComponent } from "@/components";
+import { status } from "@/configs/status";
 import { addPost, setSuccess } from "@/redux/blog/blogSlice";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { IPost } from "@/types/Post.type";
-import { getSessionStorage } from "@/utils/cookie";
+import { getSessionStorage, getTokenFromCookie } from "@/utils/cookie";
 import { schema } from "@/utils/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Input, Select, Typography } from "antd";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -15,8 +17,6 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
-import { status } from "@/configs/status";
-import Link from "next/link";
 
 const Create = () => {
   const { Text, Title } = Typography;
@@ -24,7 +24,9 @@ const Create = () => {
   const createPostSchema = schema.pick(["title", "desc", "status"]);
   const [userId, setUserId] = useState("");
   const dispatch = useAppDispatch();
-  const { error, success } = useSelector((state: RootState) => state.blog);
+  const { error, success, isLoading } = useSelector(
+    (state: RootState) => state.blog
+  );
   const route = useRouter();
 
   useEffect(() => {
@@ -35,10 +37,10 @@ const Create = () => {
   }, []);
 
   useEffect(() => {
-    if (error?.errors) {
-      toast.warning(
-        error?.errors[0][0].toUpperCase() + error?.errors[0].slice(1)
-      );
+    console.log(error);
+
+    if (error?.message) {
+      toast.warning(error?.message);
     }
   }, [error]);
 
@@ -142,7 +144,11 @@ const Create = () => {
           />
         </Form.Item>
 
-        <ButtonComponent htmlType="submit" content="Add post" />
+        <ButtonComponent
+          loading={isLoading}
+          htmlType="submit"
+          content="Add post"
+        />
 
         <Link href={"/todo"}>
           <Title className={styles.text} italic level={5}>

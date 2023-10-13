@@ -26,3 +26,15 @@
   display: flex;
   justify-content: end;
 }
+
+@media only screen and (max-width: 1500px) {
+  .login_form {
+    width: 50%;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .login_form {
+    width: 80%;
+  }
+}

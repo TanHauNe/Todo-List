@@ -1,5 +1,6 @@
 "use client";
 
+import { ISearchParams } from "@/types/Post.type";
 import { getSessionStorage, getTokenFromCookie } from "@/utils/cookie";
 import axios, { AxiosResponse } from "axios";
 
@@ -16,10 +17,13 @@ interface ApiResponse {
   data: any;
 }
 
-export async function getListData(): Promise<ApiResponse> {
+export async function getListData(
+  additionalParams: ISearchParams
+): Promise<ApiResponse> {
   try {
     const response: AxiosResponse<ApiResponse> = await axios.get(
-      `${apiUrl}/api/todo/list/${userId}`
+      `${apiUrl}/api/todo/list/${userId}`,
+      { params: additionalParams }
     );
 
     return response.data;

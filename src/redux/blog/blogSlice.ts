@@ -6,7 +6,7 @@ import {
   putData,
 } from "@/utils/http";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { IPost } from "../../types/Post.type";
+import { IPost, ISearchParams } from "../../types/Post.type";
 import { status } from "@/configs/status";
 
 const initEditPost: IPost = {
@@ -21,6 +21,7 @@ interface BlogState {
   isLoading: boolean;
   error: any;
   success: boolean;
+  total: number;
 }
 
 const initialState: BlogState = {
@@ -29,13 +30,14 @@ const initialState: BlogState = {
   isLoading: false,
   error: {},
   success: false,
+  total: 0,
 };
 
 export const getPostList = createAsyncThunk(
   "blog/getPostList",
-  async (_, { rejectWithValue }) => {
+  async (search: ISearchParams, { rejectWithValue }) => {
     try {
-      const response = await getListData();
+      const response = await getListData(search);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -118,7 +120,9 @@ const blogSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getPostList.fulfilled, (state, action) => {
-        state.postList = action.payload;
+        state.postList = action?.payload?.to_dos;
+        state.total = action?.payload?.total;
+        
         state.isLoading = false;
       })
       .addCase(getPostList.rejected, (state, action) => {
