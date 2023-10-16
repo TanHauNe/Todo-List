@@ -53,7 +53,7 @@ export default function UserLayout({
       if (!accessToken) {
         route.push(path.login);
       }
-      return setUser(user || "");
+      return setUser(user ?? "");
     }
   }, []);
 
@@ -91,18 +91,11 @@ export default function UserLayout({
               onClick={() => setCollapsed(!collapsed)}
               style={{
                 fontSize: "16px",
-                width: 64,
-                height: 64,
               }}
             />
           </div>
           <div className="center_info">
-            <Image
-              className="profile_info"
-              width={70}
-              height={70}
-              src={user?.url_img || ""}
-            />
+            <Image className="profile_info" src={user?.url_img ?? ""} />
             <Title
               level={3}
               style={{
@@ -111,7 +104,7 @@ export default function UserLayout({
                 color: "white",
               }}
             >
-              {user?.full_name}
+              {user?.full_name ?? ""}
             </Title>
           </div>
           <Menu
