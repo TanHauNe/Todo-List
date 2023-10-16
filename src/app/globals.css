@@ -1,5 +1,5 @@
 body {
-  background-color: rgb(195, 242, 242);
+  background-color: #f5f5f5;
 }
 
 .sider_container {
@@ -7,8 +7,8 @@ body {
 }
 
 .profile_info {
-  width: 120px !important;
-  height: 120px !important;
+  width: 70px !important;
+  height: 70px !important;
   object-fit: cover;
   border-radius: 50%;
 }
@@ -38,5 +38,5 @@ body {
 
 .logout_button {
   position: absolute;
-  bottom: 30px;
+  bottom: 20px;
 }

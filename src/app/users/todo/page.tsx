@@ -4,8 +4,7 @@ import { ButtonComponent, InputComponent, PostItem } from "@/components";
 import { deletePost, getPostList, setClearState } from "@/redux/blog/blogSlice";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { ISearchParams } from "@/types/Post.type";
-import { clearCookie, clearSessionStorage } from "@/utils/cookie";
-import { LogoutOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { Form, Pagination, PaginationProps } from "antd";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
@@ -13,6 +12,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import styles from "./page.module.css";
+import { path } from "@/configs/path";
 
 const List = ({
   searchParams,
@@ -38,9 +38,9 @@ const List = ({
 
   const form = useForm<ISearchParams>({
     defaultValues: {
-      key_search: search,
-      page: page,
-      limited: limit,
+      key_search: search || "",
+      page: page || 1,
+      limited: limit || 12,
     },
     mode: "all",
   });
@@ -65,20 +65,20 @@ const List = ({
 
   const handleStartEditPost = (postId: string) => {
     dispatch(setClearState());
-    route.replace(`todo/${postId}`);
+    route.push(`${path.todo}/${postId}`);
   };
 
   const handleCreate = () => {
-    route.push("create");
+    route.push(path.create);
   };
 
   const onSubmit = (data: ISearchParams) => {
-    route.push(`/todo?search=${data.key_search}`);
+    route.push(`/users/todo?search=${data.key_search}`);
   };
 
   const onChange: PaginationProps["onChange"] = (page) => {
     const searchParam = watch("key_search");
-    route.push(`/todo?search=${searchParam}&page=${page}`);
+    route.push(`/users/todo?search=${searchParam}&page=${page}`);
   };
 
   return (
@@ -117,7 +117,12 @@ const List = ({
       >
         <PlusOutlined />
       </div>
-      <Pagination current={page} onChange={onChange} total={total} />
+      <Pagination
+        className={styles.paginate_group}
+        current={page}
+        onChange={onChange}
+        total={total}
+      />
     </div>
   );
 };

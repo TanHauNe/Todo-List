@@ -20,6 +20,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
 import { RcFile } from "antd/es/upload";
+import { path } from "@/configs/path";
 
 const Profile = () => {
   const editSchema = schema.pick(["email", "full_name", "url_img"]);
@@ -34,9 +35,9 @@ const Profile = () => {
   const form = useForm<IEditProfile>({
     mode: "all",
     defaultValues: {
-      email: user?.email,
-      full_name: user?.full_name,
-      url_img: user?.url_img,
+      email: user?.email || "",
+      full_name: user?.full_name || "",
+      url_img: user?.url_img || "",
     },
     resolver: yupResolver(editSchema),
   });
@@ -46,7 +47,7 @@ const Profile = () => {
       const user = getSessionStorage();
       const accessToken = getTokenFromCookie("token");
       if (!accessToken) {
-        route.push("/login");
+        route.push(path.login);
       }
       return setUser(user || "");
     }
@@ -81,7 +82,7 @@ const Profile = () => {
 
   const onSubmit = (data: IEditProfile) => {
     dispatch(editProfile(data)).then(() => {
-      route.push("/profile");
+      route.push(path.profile);
       dispatch(setClearState());
     });
   };
@@ -164,7 +165,7 @@ const Profile = () => {
         </Form.Item>
 
         <ButtonComponent
-          loading={isLoading ? true : false}
+          loading={isLoading}
           className={styles.button}
           htmlType="submit"
           content="Update profile"

@@ -17,6 +17,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
 import Loading from "@/app/loading";
+import { path } from "@/configs/path";
 
 const Edit = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -49,7 +50,7 @@ const Edit = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     if (success) {
       toast.success("Update successfully");
-      route.push("/todo");
+      route.push(path.todo);
     }
   }, [success]);
 
@@ -98,7 +99,7 @@ const Edit = ({ params }: { params: { id: string } }) => {
   };
 
   const handleCancelEditPost = () => {
-    route.push("/todo");
+    route.push(path.todo);
   };
   return (
     <Suspense fallback={<Loading />}>

@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
+import { path } from "@/configs/path";
 
 const Register = () => {
   const registerSchema = schema.pick([
@@ -131,7 +132,7 @@ const Register = () => {
           htmlType="submit"
           content="Register"
         />
-        <Link className={styles.text} href={"/login"}>
+        <Link className={styles.text} href={path.login}>
           Login
         </Link>
       </Form>

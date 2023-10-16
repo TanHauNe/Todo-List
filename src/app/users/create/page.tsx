@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
+import { path } from "@/configs/path";
 
 const Create = () => {
   const { Title } = Typography;
@@ -46,7 +47,7 @@ const Create = () => {
     if (success) {
       toast.success("Create successfully");
       reset();
-      route.push("todo");
+      route.push(path.todo);
     }
   }, [success]);
 
@@ -148,7 +149,7 @@ const Create = () => {
           content="Add post"
         />
 
-        <Link className={styles.text} href={"/todo"}>
+        <Link className={styles.text} href={path.todo}>
           Todo list
         </Link>
       </Form>

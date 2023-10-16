@@ -13,10 +13,12 @@ function setTokenCookie(
 
 function getTokenFromCookie(key: string): string | null {
   function getCookie(name: string): string | null {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop()?.split(";").shift() || null;
-    return null;
+    if (typeof window !== "undefined") {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop()?.split(";").shift() || null;
+      return null;
+    }
   }
   const tokenFromCookie = getCookie(key);
   return tokenFromCookie;
@@ -32,15 +34,17 @@ function setSessionStorage(user: IUser) {
 }
 
 function getSessionStorage() {
-  const userDataJSON = sessionStorage.getItem("userData");
-  try {
-    if (userDataJSON) {
-      const userData = JSON.parse(userDataJSON);
-      return userData;
+  if (typeof window !== "undefined") {
+    const userDataJSON = sessionStorage.getItem("userData");
+    try {
+      if (userDataJSON) {
+        const userData = JSON.parse(userDataJSON);
+        return userData;
+      }
+      return null;
+    } catch (err) {
+      return err;
     }
-    return null;
-  } catch (err) {
-    return err;
   }
 }
 

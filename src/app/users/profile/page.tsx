@@ -9,8 +9,9 @@ import styles from "./page.module.css";
 import { ButtonComponent } from "@/components";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+import { path } from "@/configs/path";
 
-const page = () => {
+const Profile = () => {
   const route = useRouter();
   const [user, setUser] = useState<IUser>();
   const { Title } = Typography;
@@ -21,12 +22,11 @@ const page = () => {
       const user = getSessionStorage();
       const accessToken = getTokenFromCookie("token");
       if (!accessToken) {
-        route.push("/login");
+        route.push(path.login);
       }
       return setUser(user || "");
     }
   }, []);
-
   return (
     <div className={styles.container}>
       <Image className={styles.profile_image} src={user?.url_img || ""} />
@@ -35,14 +35,14 @@ const page = () => {
         {user?.full_name}
       </Title>
       <ButtonComponent
-        loading={isLoading ? true : false}
+        loading={isLoading}
         className={styles.profile_button}
         htmlType="submit"
         content="Update profile"
-        onClick={() => route.push("/profile/edit")}
+        onClick={() => route.push(path.editProfile)}
       />
     </div>
   );
 };
 
-export default page;
+export default Profile;

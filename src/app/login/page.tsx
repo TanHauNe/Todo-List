@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
+import { path } from "@/configs/path";
 
 const Login = () => {
   const loginSchema = schema.pick(["email", "password"]);
@@ -29,9 +30,7 @@ const Login = () => {
 
   useEffect(() => {
     if (auth) {
-      setTimeout(() => {
-        route.push("profile");
-      }, 1000);
+      route.push(path.profile);
     }
   }, [auth]);
 
@@ -110,7 +109,7 @@ const Login = () => {
           htmlType="submit"
           content="Login"
         />
-        <Link className={styles.text} href={"/register"}>
+        <Link className={styles.text} href={path.register}>
           Register account
         </Link>
       </Form>
