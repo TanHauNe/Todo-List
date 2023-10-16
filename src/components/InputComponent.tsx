@@ -1,3 +1,5 @@
+"use client";
+
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { Input } from "antd";
 import { Controller } from "react-hook-form";
@@ -18,6 +20,7 @@ const InputComponent = ({
         render={({ field }) =>
           isPassword ? (
             <Input.Password
+              autoComplete="on"
               className={className || ""}
               placeholder={placeholder}
               iconRender={(visible) =>

@@ -2,7 +2,7 @@
 
 import { ButtonComponent, InputComponent } from "@/components";
 import { RootState, useAppDispatch } from "@/redux/store";
-import { loginUser, setSuccessError } from "@/redux/user/userSlice";
+import { loginUser, setClearState } from "@/redux/user/userSlice";
 import { ILogin } from "@/types/User.type";
 import { schema } from "@/utils/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
+import { path } from "@/configs/path";
 
 const Login = () => {
   const loginSchema = schema.pick(["email", "password"]);
@@ -29,7 +30,7 @@ const Login = () => {
 
   useEffect(() => {
     if (auth) {
-      route.push("todo");
+      route.push(path.profile);
     }
   }, [auth]);
 
@@ -64,7 +65,7 @@ const Login = () => {
     };
 
     dispatch(loginUser(loginData)).then(() => {
-      dispatch(setSuccessError());
+      dispatch(setClearState());
     });
   };
 
@@ -108,10 +109,8 @@ const Login = () => {
           htmlType="submit"
           content="Login"
         />
-        <Link href={"/register"}>
-          <Title className={styles.text} italic level={5}>
-            Register account
-          </Title>
+        <Link className={styles.text} href={path.register}>
+          Register account
         </Link>
       </Form>
       <ToastContainer limit={2} />

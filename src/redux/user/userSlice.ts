@@ -1,6 +1,7 @@
 import { setSessionStorage, setTokenCookie } from "@/utils/cookie";
-import { IAuth, ILogin, IRegister } from "../../types/User.type";
+import { IAuth, IEditProfile, ILogin, IRegister } from "../../types/User.type";
 import {
+  editProfileAPI,
   loginAPI,
   postImage,
   refreshTokenAPI,
@@ -13,6 +14,7 @@ interface userState {
   isLoading: boolean;
   error: any;
   success: boolean;
+  urlImg: string;
 }
 
 const initialState: userState = {
@@ -33,6 +35,7 @@ const initialState: userState = {
   isLoading: false,
   error: {},
   success: false,
+  urlImg: "",
 };
 
 export const loginUser = createAsyncThunk(
@@ -71,11 +74,11 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const uploadImage = createAsyncThunk(
-  "user/uploadImage",
-  async (body: any, { rejectWithValue }) => {
+export const editProfile = createAsyncThunk(
+  "user/editProfile",
+  async (body: IEditProfile, { rejectWithValue }) => {
     try {
-      const response = await postImage(body);
+      const response = await editProfileAPI(body);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -83,13 +86,27 @@ export const uploadImage = createAsyncThunk(
   }
 );
 
-const blogSlice = createSlice({
-  name: "blog",
+export const uploadImage = createAsyncThunk(
+  "user/uploadImage",
+  async (body: FormData, { rejectWithValue }) => {
+    try {
+      const response = await postImage(body);
+
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const userSlice = createSlice({
+  name: "user",
   initialState,
   reducers: {
-    setSuccessError: (state) => {
+    setClearState: (state) => {
       state.success = false;
       state.error = {};
+      state.urlImg = "";
     },
   },
   extraReducers(builder) {
@@ -123,11 +140,26 @@ const blogSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
+      .addCase(editProfile.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(editProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        setSessionStorage(action.payload);
+        state.auth.user = action.payload;
+        state.error = {};
+        state.success = true;
+      })
+      .addCase(editProfile.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
       .addCase(uploadImage.pending, (state, action) => {
         state.isLoading = true;
       })
       .addCase(uploadImage.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.urlImg = action.payload.url_img;
       })
       .addCase(uploadImage.rejected, (state, action) => {
         state.isLoading = false;
@@ -135,6 +167,6 @@ const blogSlice = createSlice({
   },
 });
 
-export const { setSuccessError } = blogSlice.actions;
+export const { setClearState } = userSlice.actions;
 
-export default blogSlice.reducer;
+export default userSlice.reducer;

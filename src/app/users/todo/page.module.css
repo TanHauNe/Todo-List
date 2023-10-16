@@ -9,7 +9,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  gap: 10px;
+  gap: 5px;
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -18,13 +18,14 @@
   display: flex;
   background-color: rgb(119, 185, 185);
   padding: 20px;
-  justify-content: space-between;
+  justify-content: center;
   border-radius: 20px;
   gap: 10px;
+  width: 30%;
 }
 
 .search_input {
-  width: 500px;
+  width: 100%;
 }
 
 .circle_button {
@@ -42,35 +43,31 @@
   cursor: pointer;
 }
 
-.logout_button {
-  right: 30px;
-  bottom: 30px;
-}
-
 .create_button {
-  right: 30px;
-  bottom: 90px;
+  right: 3%;
+  bottom: 3%;
 }
 
 .paginate_group {
-  position: fixed;
-  bottom: 30px;
-  display: flex;
-  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .paginate_button {
   width: 80px;
 }
 
-@media only screen and (max-width: 1500px) {
-  .search_input {
-    width: 400px;
+.search_button {
+  width: 100px;
+}
+
+@media only screen and (max-width: 1024px) {
+  .search_form {
+    width: 50%;
   }
 }
 
-@media only screen and (max-width: 1000px) {
-  .search_input {
-    width: 300px;
+@media only screen and (max-width: 768px) {
+  .search_form {
+    width: 75%;
   }
 }

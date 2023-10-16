@@ -28,3 +28,9 @@ export interface IAuth {
   access_token: string;
   refresh_token: string;
 }
+
+export interface IEditProfile {
+  email: string;
+  full_name: string;
+  url_img: string;
+}

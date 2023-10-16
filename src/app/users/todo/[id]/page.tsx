@@ -2,7 +2,7 @@
 
 import { ButtonComponent, InputComponent } from "@/components";
 import { status } from "@/configs/status";
-import { getPost, setSuccess, updatePost } from "@/redux/blog/blogSlice";
+import { getPost, setClearState, updatePost } from "@/redux/blog/blogSlice";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { IPost } from "@/types/Post.type";
 import { getSessionStorage, getTokenFromCookie } from "@/utils/cookie";
@@ -17,6 +17,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
 import Loading from "@/app/loading";
+import { path } from "@/configs/path";
 
 const Edit = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -49,7 +50,7 @@ const Edit = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     if (success) {
       toast.success("Update successfully");
-      route.push("/todo");
+      route.push(path.todo);
     }
   }, [success]);
 
@@ -65,9 +66,9 @@ const Edit = ({ params }: { params: { id: string } }) => {
 
   const form = useForm<IPost>({
     defaultValues: {
-      title: editPost?.title || "",
-      desc: editPost?.desc || "",
-      status: editPost?.status || status.doNot,
+      title: editPost?.title ?? "",
+      desc: editPost?.desc ?? "",
+      status: editPost?.status ?? status.doNot,
     },
     mode: "all",
     resolver: yupResolver(createPostSchema),
@@ -93,12 +94,12 @@ const Edit = ({ params }: { params: { id: string } }) => {
         body: postData,
       })
     ).then(() => {
-      dispatch(setSuccess());
+      dispatch(setClearState());
     });
   };
 
   const handleCancelEditPost = () => {
-    route.push("/todo");
+    route.push(path.todo);
   };
   return (
     <Suspense fallback={<Loading />}>

@@ -2,7 +2,7 @@
 
 import { ButtonComponent, InputComponent } from "@/components";
 import { RootState, useAppDispatch } from "@/redux/store";
-import { registerUser, setSuccessError } from "@/redux/user/userSlice";
+import { registerUser, setClearState } from "@/redux/user/userSlice";
 import { IRegister } from "@/types/User.type";
 import { schema } from "@/utils/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
+import { path } from "@/configs/path";
 
 const Register = () => {
   const registerSchema = schema.pick([
@@ -59,7 +60,7 @@ const Register = () => {
 
   const onSubmit = (data: IRegister) => {
     dispatch(registerUser(data)).then(() => {
-      dispatch(setSuccessError());
+      dispatch(setClearState());
     });
   };
 
@@ -131,10 +132,8 @@ const Register = () => {
           htmlType="submit"
           content="Register"
         />
-        <Link href={"/login"}>
-          <Title className={styles.text} italic level={5}>
-            Login
-          </Title>
+        <Link className={styles.text} href={path.login}>
+          Login
         </Link>
       </Form>
       <div>

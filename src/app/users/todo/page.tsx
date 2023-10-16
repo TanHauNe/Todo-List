@@ -1,25 +1,20 @@
 "use client";
 
 import { ButtonComponent, InputComponent, PostItem } from "@/components";
-import { deletePost, getPostList, setSuccess } from "@/redux/blog/blogSlice";
+import { deletePost, getPostList, setClearState } from "@/redux/blog/blogSlice";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { ISearchParams } from "@/types/Post.type";
-import {
-  clearCookie,
-  clearSessionStorage,
-  getTokenFromCookie,
-} from "@/utils/cookie";
-import { LogoutOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { Form, Pagination, PaginationProps } from "antd";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
-import { Suspense, useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import Loading from "../loading";
 import styles from "./page.module.css";
+import { path } from "@/configs/path";
 
-const List = async ({
+const List = ({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -43,9 +38,9 @@ const List = async ({
 
   const form = useForm<ISearchParams>({
     defaultValues: {
-      key_search: search,
-      page: page,
-      limited: limit,
+      key_search: search ?? "",
+      page: page ?? 1,
+      limited: limit ?? 12,
     },
     mode: "all",
   });
@@ -63,32 +58,27 @@ const List = async ({
   }, [page, search]);
 
   const handleDelete = (postId: string) => {
-    dispatch(deletePost(postId));
+    dispatch(deletePost(postId)).then(() => {
+      dispatch(setClearState());
+    });
   };
 
   const handleStartEditPost = (postId: string) => {
-    dispatch(setSuccess());
-    route.replace(`todo/${postId}`);
+    dispatch(setClearState());
+    route.push(`${path.todo}/${postId}`);
   };
 
   const handleCreate = () => {
-    route.push("create");
-  };
-
-  const handleLogout = () => {
-    clearCookie("token");
-    clearCookie("refresh_token");
-    clearSessionStorage();
-    route.push("/login");
+    route.push(path.create);
   };
 
   const onSubmit = (data: ISearchParams) => {
-    route.push(`/todo?search=${data.key_search}&page=1`);
+    route.push(`/users/todo?search=${data.key_search}`);
   };
 
   const onChange: PaginationProps["onChange"] = (page) => {
     const searchParam = watch("key_search");
-    route.push(`/todo?search=${searchParam}&page=${page}`);
+    route.push(`/users/todo?search=${searchParam}&page=${page}`);
   };
 
   return (
@@ -111,31 +101,28 @@ const List = async ({
           content="Search"
         />
       </Form>
-      <Suspense fallback={<Loading />}>
-        <div className={styles.list_container}>
-          {postList.map((post) => (
-            <PostItem
-              post={post}
-              key={post?._id}
-              handleDelete={handleDelete}
-              handleStartEditPost={handleStartEditPost}
-            />
-          ))}
-        </div>
-      </Suspense>
-      <div
-        onClick={handleLogout}
-        className={clsx(styles.circle_button, styles.logout_button)}
-      >
-        <LogoutOutlined />
+      <div className={styles.list_container}>
+        {postList.map((post) => (
+          <PostItem
+            post={post}
+            key={post?._id}
+            handleDelete={handleDelete}
+            handleStartEditPost={handleStartEditPost}
+          />
+        ))}
       </div>
       <div
         onClick={handleCreate}
         className={clsx(styles.circle_button, styles.create_button)}
       >
-        +
+        <PlusOutlined />
       </div>
-      <Pagination current={page} onChange={onChange} total={total} />
+      <Pagination
+        className={styles.paginate_group}
+        current={page}
+        onChange={onChange}
+        total={total}
+      />
     </div>
   );
 };

@@ -2,7 +2,7 @@
 
 import { ISearchParams } from "@/types/Post.type";
 import { getSessionStorage, getTokenFromCookie } from "@/utils/cookie";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 const apiUrl = "https://todoapp-uit.vercel.app";
 
@@ -27,12 +27,7 @@ export async function getListData(
     );
 
     return response.data;
-  } catch (error: any) {
-    if (error.response) {
-      console.error("Lỗi từ API:", error.response.data);
-    } else {
-      console.error("Lỗi không thể kết nối đến server:", error.message);
-    }
+  } catch (error) {
     throw error;
   }
 }
@@ -44,12 +39,7 @@ export async function getData(postId: string): Promise<ApiResponse> {
     );
 
     return response.data;
-  } catch (error: any) {
-    if (error.response) {
-      console.error("Lỗi từ API:", error.response.data);
-    } else {
-      console.error("Lỗi không thể kết nối đến server:", error.message);
-    }
+  } catch (error) {
     throw error;
   }
 }
@@ -62,12 +52,7 @@ export async function postData(data: any): Promise<ApiResponse> {
     );
 
     return response.data;
-  } catch (error: any) {
-    if (error.response) {
-      console.error("Lỗi từ API:", error.response.data);
-    } else {
-      console.error("Lỗi không thể kết nối đến server:", error.message);
-    }
+  } catch (error) {
     throw error;
   }
 }
@@ -80,12 +65,7 @@ export async function putData(data: any, postId: string): Promise<ApiResponse> {
     );
 
     return response.data;
-  } catch (error: any) {
-    if (error.response) {
-      console.error("Lỗi từ API:", error.response.data);
-    } else {
-      console.error("Lỗi không thể kết nối đến server:", error.message);
-    }
+  } catch (error) {
     throw error;
   }
 }
@@ -97,12 +77,7 @@ export async function deleteData(postId: string): Promise<ApiResponse> {
     );
 
     return response.data;
-  } catch (error: any) {
-    if (error.response) {
-      console.error("Lỗi từ API:", error.response.data);
-    } else {
-      console.error("Lỗi không thể kết nối đến server:", error.message);
-    }
+  } catch (error) {
     throw error;
   }
 }
@@ -115,12 +90,7 @@ export async function registerAPI(data: any): Promise<ApiResponse> {
     );
 
     return response.data;
-  } catch (error: any) {
-    if (error.response) {
-      console.error("Lỗi từ API:", error.response.data);
-    } else {
-      console.error("Lỗi không thể kết nối đến server:", error.message);
-    }
+  } catch (error) {
     throw error;
   }
 }
@@ -133,12 +103,7 @@ export async function loginAPI(data: any): Promise<ApiResponse> {
     );
 
     return response.data;
-  } catch (error: any) {
-    if (error.response) {
-      console.error("Lỗi từ API:", error.response.data);
-    } else {
-      console.error("Lỗi không thể kết nối đến server:", error.message);
-    }
+  } catch (error) {
     throw error;
   }
 }
@@ -151,30 +116,36 @@ export async function refreshTokenAPI(data: any): Promise<ApiResponse> {
     );
 
     return response.data;
-  } catch (error: any) {
-    if (error.response) {
-      console.error("Lỗi từ API:", error.response.data);
-    } else {
-      console.error("Lỗi không thể kết nối đến server:", error.message);
-    }
+  } catch (error) {
     throw error;
   }
 }
 
-export async function postImage(data: any): Promise<ApiResponse> {
+export async function editProfileAPI(data: any): Promise<ApiResponse> {
   try {
-    const response: AxiosResponse<ApiResponse> = await axios.post(
-      `${apiUrl}/api/upload/image`,
+    const response: AxiosResponse<ApiResponse> = await axios.put(
+      `${apiUrl}/api/users/${userId}`,
       data
     );
 
     return response.data;
-  } catch (error: any) {
-    if (error.response) {
-      console.error("Lỗi từ API:", error.response.data);
-    } else {
-      console.error("Lỗi không thể kết nối đến server:", error.message);
-    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function postImage(formData: FormData): Promise<ApiResponse> {
+  try {
+    const response: AxiosResponse<ApiResponse> = await axios.post(
+      `${apiUrl}/api/upload/image`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
     throw error;
   }
 }

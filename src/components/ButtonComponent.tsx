@@ -1,3 +1,5 @@
+"use client"
+
 import { IButton } from "@/types/Common.type";
 import { Button } from "antd";
 

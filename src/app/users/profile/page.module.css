@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.profile_image {
+  width: 200px !important;
+  height: 200px !important;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.profile_email {
+  color: gray;
+  margin: 10px 0;
+}
+
+.profile_button {
+  margin-top: 20px;
+}
