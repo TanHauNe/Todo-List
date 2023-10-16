@@ -65,71 +65,74 @@ export default function UserLayout({
   };
 
   return (
-    <section>
-      <Content
-        style={{
-          padding: "0",
-          width: "100%",
-        }}
-      >
-        <Layout style={{ padding: "0", height: "98vh", width: "100%" }}>
-          <Sider
-            className="sider_container"
-            trigger={null}
-            collapsible
-            collapsed={collapsed}
-          >
-            <div className="center_info">
-              <Button
-                type="text"
-                icon={
-                  collapsed ? (
-                    <MenuUnfoldOutlined style={{ color: "white" }} />
-                  ) : (
-                    <MenuFoldOutlined style={{ color: "white" }} />
-                  )
-                }
-                onClick={() => setCollapsed(!collapsed)}
-                style={{
-                  fontSize: "16px",
-                  width: 64,
-                  height: 64,
-                }}
-              />
-            </div>
-            <div className="center_info">
-              <Image className="profile_info" src={user?.url_img || ""} />
-              <Title
-                level={3}
-                style={{
-                  textAlign: "center",
-                  marginTop: "0",
-                  color: "white",
-                }}
-              >
-                {user?.full_name}
-              </Title>
-            </div>
-            <Menu
-              theme="dark"
-              mode="inline"
-              defaultSelectedKeys={["1"]}
-              items={arrayItems}
+    <Content
+      style={{
+        padding: "0",
+        width: "100%",
+      }}
+    >
+      <Layout style={{ padding: "0", height: "98vh", width: "100%" }}>
+        <Sider
+          className="sider_container"
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+        >
+          <div className="center_info">
+            <Button
+              type="text"
+              icon={
+                collapsed ? (
+                  <MenuUnfoldOutlined style={{ color: "white" }} />
+                ) : (
+                  <MenuFoldOutlined style={{ color: "white" }} />
+                )
+              }
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                fontSize: "16px",
+                width: 64,
+                height: 64,
+              }}
             />
-            <div className="center_info">
-              <div
-                onClick={handleLogout}
-                className={clsx("circle_button", "logout_button")}
-              >
-                <LogoutOutlined />
-              </div>
+          </div>
+          <div className="center_info">
+            <Image
+              className="profile_info"
+              width={70}
+              height={70}
+              src={user?.url_img || ""}
+            />
+            <Title
+              level={3}
+              style={{
+                textAlign: "center",
+                marginTop: "0",
+                color: "white",
+              }}
+            >
+              {user?.full_name}
+            </Title>
+          </div>
+          <Menu
+            theme="dark"
+            mode="inline"
+            defaultSelectedKeys={["1"]}
+            items={arrayItems}
+          />
+          <div className="center_info">
+            <div
+              onClick={handleLogout}
+              className={clsx("circle_button", "logout_button")}
+            >
+              <LogoutOutlined />
             </div>
-          </Sider>
-          <Content>
-            <Providers>{children}</Providers>
-          </Content>
-        </Layout>
-      </Content>
-    </section>
+          </div>
+        </Sider>
+        <Content>
+          <Providers>{children}</Providers>
+        </Content>
+      </Layout>
+    </Content>
   );
 }

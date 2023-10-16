@@ -7,8 +7,6 @@ body {
 }
 
 .profile_info {
-  width: 70px !important;
-  height: 70px !important;
   object-fit: cover;
   border-radius: 50%;
 }

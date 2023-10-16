@@ -41,7 +41,6 @@ function getSessionStorage() {
         const userData = JSON.parse(userDataJSON);
         return userData;
       }
-      return null;
     } catch (err) {
       return err;
     }

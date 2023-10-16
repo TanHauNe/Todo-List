@@ -66,9 +66,9 @@ const Edit = ({ params }: { params: { id: string } }) => {
 
   const form = useForm<IPost>({
     defaultValues: {
-      title: editPost?.title || "",
-      desc: editPost?.desc || "",
-      status: editPost?.status || status.doNot,
+      title: editPost?.title ?? "",
+      desc: editPost?.desc ?? "",
+      status: editPost?.status ?? status.doNot,
     },
     mode: "all",
     resolver: yupResolver(createPostSchema),

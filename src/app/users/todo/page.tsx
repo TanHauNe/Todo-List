@@ -38,9 +38,9 @@ const List = ({
 
   const form = useForm<ISearchParams>({
     defaultValues: {
-      key_search: search || "",
-      page: page || 1,
-      limited: limit || 12,
+      key_search: search ?? "",
+      page: page ?? 1,
+      limited: limit ?? 12,
     },
     mode: "all",
   });

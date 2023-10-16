@@ -35,9 +35,9 @@ const Profile = () => {
   const form = useForm<IEditProfile>({
     mode: "all",
     defaultValues: {
-      email: user?.email || "",
-      full_name: user?.full_name || "",
-      url_img: user?.url_img || "",
+      email: user?.email ?? "",
+      full_name: user?.full_name ?? "",
+      url_img: user?.url_img ?? "",
     },
     resolver: yupResolver(editSchema),
   });
