@@ -5,7 +5,7 @@ import { status } from "@/configs/status";
 import { addPost, setClearState } from "@/redux/blog/blogSlice";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { IPost } from "@/types/Post.type";
-import { getSessionStorage, getTokenFromCookie } from "@/utils/cookie";
+import { getSessionStorage } from "@/utils/cookie";
 import { schema } from "@/utils/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Input, Select, Typography } from "antd";
@@ -19,7 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import styles from "./page.module.css";
 
 const Create = () => {
-  const { Text, Title } = Typography;
+  const { Title } = Typography;
   const { TextArea } = Input;
   const createPostSchema = schema.pick(["title", "desc", "status"]);
   const [userId, setUserId] = useState("");
@@ -148,10 +148,8 @@ const Create = () => {
           content="Add post"
         />
 
-        <Link href={"/todo"}>
-          <Title className={styles.text} italic level={5}>
-            Todo list
-          </Title>
+        <Link className={styles.text} href={"/todo"}>
+          Todo list
         </Link>
       </Form>
       <ToastContainer limit={2} />

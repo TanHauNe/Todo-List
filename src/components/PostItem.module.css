@@ -1,4 +1,5 @@
 .button_group {
+  flex: 2;
   display: flex;
   justify-content: flex-end;
   gap: 5px;
@@ -15,31 +16,27 @@
 }
 
 .card {
-  width: 80%;
-  border-radius: 10px;
+  width: 90%;
   padding: 10px 20px;
   border: 1px solid rgb(119, 185, 185);
   background-color: azure;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .card_title {
-  margin: 0;
-  padding: 5px 0;
-  border-bottom: 1px solid rgb(225, 217, 217);
+  flex: 3;
+  margin: 0 !important;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 1; /* number of lines to show */
   line-clamp: 3;
   -webkit-box-orient: vertical;
-}
-
-.card_body {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .card_text {
+  flex: 5;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 1; /* number of lines to show */
@@ -47,15 +44,10 @@
   -webkit-box-orient: vertical;
 }
 
-
-@media only screen and (max-width: 1500px) {
+@media only screen and (max-width: 1024px) {
   .card {
     width: 90%;
-  }
-}
-
-@media only screen and (max-width: 1000px) {
-  .card {
-    width: 95%;
+    flex-direction: column;
+    height: 110px;
   }
 }

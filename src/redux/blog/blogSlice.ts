@@ -112,6 +112,7 @@ const blogSlice = createSlice({
     setClearState: (state) => {
       state.success = false;
       state.error = {};
+      state.isLoading = false;
     },
   },
   extraReducers(builder) {
@@ -122,7 +123,6 @@ const blogSlice = createSlice({
       .addCase(getPostList.fulfilled, (state, action) => {
         state.postList = action?.payload?.to_dos;
         state.total = action?.payload?.total;
-
         state.isLoading = false;
       })
       .addCase(getPostList.rejected, (state, action) => {

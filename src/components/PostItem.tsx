@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { IPost } from "../types/Post.type";
 import styles from "./PostItem.module.css";
-import { Tag, Typography } from "antd";
+import { Modal, Tag, Typography } from "antd";
 import { ButtonComponent } from ".";
 import { status } from "@/configs/status";
 
@@ -19,6 +19,7 @@ const PostItem = ({
   handleStartEditPost,
 }: PostItemType) => {
   const { Text, Title } = Typography;
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [statusArray, setStatusArray] = useState({
     color: "",
     text: "",
@@ -43,31 +44,50 @@ const PostItem = ({
     }
   }, [post]);
 
+  const showModal = (id: string) => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    handleDelete(post._id || "");
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className={styles.card}>
-      <Title title={post?.title} level={4} className={styles.card_title}>
+      <Title title={post?.title} level={5} className={styles.card_title}>
         {post?.title}
       </Title>
-      <div className={styles.card_body}>
-        <Text title={post.desc} className={styles.card_text}>
-          {post.desc}
-        </Text>
-        <div className={styles.button_group}>
-          <Tag color={statusArray.color} className={styles.button_item}>
-            {statusArray.text}
-          </Tag>
-          <ButtonComponent
-            className={styles.button_item}
-            content="Edit"
-            onClick={() => handleStartEditPost(post._id || "")}
-          />
-          <ButtonComponent
-            className={styles.button_item}
-            danger
-            content="Delete"
-            onClick={() => handleDelete(post._id || "")}
-          />
-        </div>
+      <Text title={post.desc} className={styles.card_text}>
+        {post.desc}
+      </Text>
+      <div className={styles.button_group}>
+        <Tag color={statusArray.color} className={styles.button_item}>
+          {statusArray.text}
+        </Tag>
+        <ButtonComponent
+          className={styles.button_item}
+          content="Edit"
+          onClick={() => handleStartEditPost(post._id || "")}
+        />
+        <ButtonComponent
+          className={styles.button_item}
+          danger
+          content="Delete"
+          onClick={() => showModal(post._id || "")}
+        />
+        <Modal
+          title="Confirm delete"
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
+          <p>Are you sure you want to delete this Post?</p>
+        </Modal>
       </div>
     </div>
   );

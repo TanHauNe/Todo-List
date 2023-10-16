@@ -29,7 +29,9 @@ const Login = () => {
 
   useEffect(() => {
     if (auth) {
-      route.push("todo");
+      setTimeout(() => {
+        route.push("profile");
+      }, 1000);
     }
   }, [auth]);
 
@@ -108,10 +110,8 @@ const Login = () => {
           htmlType="submit"
           content="Login"
         />
-        <Link href={"/register"}>
-          <Title className={styles.text} italic level={5}>
-            Register account
-          </Title>
+        <Link className={styles.text} href={"/register"}>
+          Register account
         </Link>
       </Form>
       <ToastContainer limit={2} />

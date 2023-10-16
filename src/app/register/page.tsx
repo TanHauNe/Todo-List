@@ -131,10 +131,8 @@ const Register = () => {
           htmlType="submit"
           content="Register"
         />
-        <Link href={"/login"}>
-          <Title className={styles.text} italic level={5}>
-            Login
-          </Title>
+        <Link className={styles.text} href={"/login"}>
+          Login
         </Link>
       </Form>
       <div>

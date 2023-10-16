@@ -9,7 +9,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  gap: 10px;
+  gap: 5px;
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -42,14 +42,9 @@
   cursor: pointer;
 }
 
-.logout_button {
-  right: 30px;
-  bottom: 30px;
-}
-
 .create_button {
-  right: 30px;
-  bottom: 90px;
+  right: 80px;
+  bottom: 30px;
 }
 
 .paginate_group {

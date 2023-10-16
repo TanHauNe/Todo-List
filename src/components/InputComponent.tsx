@@ -1,3 +1,5 @@
+"use client"
+
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { Input } from "antd";
 import { Controller } from "react-hook-form";
